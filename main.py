@@ -5,7 +5,7 @@ Entry point script.
 import argparse
 
 from .utils.sheets import write_game_log
-from .utils.readme import write_stats
+from .utils.read_update import write_stats
 
 def main_db_write(args):
     data = [args.row.split(',')]
