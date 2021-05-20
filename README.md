@@ -26,6 +26,7 @@ python -m avalon.main update_stat
 
 **Good win %:**
 Cheesy wins included: 0.4524
+
 Cheesy wins excluded: 0.3889
 
 **Good win % w.r.t. # players:**
@@ -38,6 +39,7 @@ Cheesy wins included:
 |           8 |            13 |     0.461538 |
 |           9 |            15 |     0.4      |
 |          10 |             9 |     0.333333 |
+
 Cheesy wins excluded:
 
 |   # Players |   Sample Size |   Good Win % |
@@ -56,6 +58,7 @@ Cheesy wins included:
 |                   1 |            37 |     0.432432 |
 |                   2 |             4 |     0.5      |
 |                   3 |             1 |     1        |
+
 Cheesy wins excluded:
 
 |   # Percival Claims |   Sample Size |   Good Win % |
@@ -71,6 +74,7 @@ Cheesy wins included:
 |----------|---------------|---------------|-------------|
 | Bad      |             9 |       39.8889 |     17.9335 |
 | Good     |             6 |       28.3333 |     14.9889 |
+
 Cheesy wins excluded:
 
 | Winner   |   Sample Size |   Mean Length |   SD Length |
@@ -98,6 +102,7 @@ Cheesy wins included:
 | Abishek  | 0.625    |     0.545455 |    0.8      |            32 |
 | Alex     | 0.619048 |     0.5      |    0.692308 |            21 |
 | Kate     | 0.558824 |     0.47619  |    0.692308 |            34 |
+
 Cheesy wins excluded:
 
 | Player   |    Win % |   Good Win % |   Bad Win % |   Sample Size |
@@ -113,25 +118,21 @@ Cheesy wins excluded:
 |----------------|---------|
 | No             |       2 |
 | Yes            |       7 |
-Cheesy wins excluded:
 
 | Strong Success   |   Count |
 |------------------|---------|
 | No               |       3 |
 | Yes              |       6 |
-Cheesy wins excluded:
 
 | Weak KGT Applied   |   Sample Size |   Good Win % |
 |--------------------|---------------|--------------|
 | No                 |            29 |     0.586207 |
 | Yes                |             9 |     0        |
-Cheesy wins excluded:
 
 | Strong KGT Applied   |   Sample Size |   Good Win % |
 |----------------------|---------------|--------------|
 | No                   |            29 |     0.586207 |
 | Yes                  |             9 |     0        |
-Cheesy wins excluded:
 
 
 **Player/role counts:**
