@@ -28,7 +28,7 @@ python -m avalon.main update_stat
 
 Cheesy wins included: 0.4524
 
-Cheesy wins excluded: 0.3889
+Cheesy wins excluded: 0.3784
 
 **Good win % w.r.t. # players:**
 
@@ -48,7 +48,7 @@ Cheesy wins excluded:
 |-------------|---------------|--------------|
 |           6 |             2 |     0.5      |
 |           7 |             1 |     1        |
-|           8 |            12 |     0.5      |
+|           8 |            13 |     0.461538 |
 |           9 |            13 |     0.307692 |
 |          10 |             8 |     0.25     |
 
@@ -66,9 +66,9 @@ Cheesy wins excluded:
 
 |   # Percival Claims |   Sample Size |   Good Win % |
 |---------------------|---------------|--------------|
-|                   1 |            31 |     0.354839 |
-|                   2 |             4 |     0.5      |
-|                   3 |             1 |     1        |
+|                   1 |            32 |      0.34375 |
+|                   2 |             4 |      0.5     |
+|                   3 |             1 |      1       |
 
 **Mean and SD game length by winning team:**
 
@@ -83,8 +83,8 @@ Cheesy wins excluded:
 
 | Winner   |   Sample Size |   Mean Length |   SD Length |
 |----------|---------------|---------------|-------------|
-| Bad      |             8 |        36.125 |     14.8943 |
-| Good     |             5 |        32.2   |     12.9885 |
+| Bad      |             9 |       39.8889 |     17.9335 |
+| Good     |             5 |       32.2    |     12.9885 |
 
 **Number of carries by player:**
 
@@ -113,10 +113,10 @@ Cheesy wins excluded:
 | Player   |    Win % |   Good Win % |   Bad Win % |   Sample Size |
 |----------|----------|--------------|-------------|---------------|
 | Ewen     | 0.833333 |     0.666667 |    1        |             6 |
-| Alex     | 0.647059 |     0.428571 |    0.8      |            17 |
+| Alex     | 0.666667 |     0.428571 |    0.818182 |            18 |
 | Brian    | 0.636364 |     0.5      |    0.909091 |            33 |
-| Kate     | 0.566667 |     0.444444 |    0.75     |            30 |
-| Abishek  | 0.555556 |     0.444444 |    0.777778 |            27 |
+| Abishek  | 0.571429 |     0.444444 |    0.8      |            28 |
+| Kate     | 0.548387 |     0.421053 |    0.75     |            31 |
 
 **Kate Good Theorem statistics:**
 | Weak Success   |   Count |
