@@ -1,0 +1,6 @@
+*.pyc
+*.pyo
+__pycache__/
+scratch/
+keys/client.json
+data/*.tsv
