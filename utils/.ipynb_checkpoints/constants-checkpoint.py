@@ -1,11 +1,15 @@
+import os
+
 # FILE PATHS
 
-ROOT = "/Users/brianyao/Code/projects/avalon/"
+ROOT = '/'.join(os.path.realpath(__file__).split('/')[:-2]) +'/' # not super elegant, but works
+README = ROOT + "README.md"
 
 # data
 
 DATA_ROOT = ROOT + "data/"
 GAME_LOG_TSV = DATA_ROOT + "game_{}.tsv" # YYYYMMDD format
+README_DEFAULT = DATA_ROOT + "readme_template.md"
 
 # keys
 
@@ -78,6 +82,8 @@ GAME_LOG_COLS = (
     [WEAK_KGT_APPLY, WEAK_KGT_SUCCESS, STRONG_KGT_APPLY, STRONG_KGT_SUCCESS] + # kgt info
     [LENGTH] # misc
 )
+
+GAME_LOG_NUM_COLS = [GAME_INDEX, NUM_PLAYERS, SUCCESSES, FAILS, GOOD_WIN, NUM_PERCIVAL, LENGTH]
 
 # player data
 # some inconsistencies in col naming due to legacy reasons

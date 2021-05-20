@@ -12,9 +12,12 @@ import pandas as pd
 
 from oauth2client.service_account import ServiceAccountCredentials
 
-sys.path.append("..") # hack
-
-from utils.constants import *
+# hack, but needed for testing in jupyter
+if __name__ == 'avalon.utils.sheets':
+    from .constants import *
+else:
+    sys.path.append('..')
+    from utils.constants import *
 
 def init_client():
     """
@@ -24,9 +27,11 @@ def init_client():
     creds = ServiceAccountCredentials.from_json_keyfile_name(CLIENT_SECRET_KEY, SCOPE)
     return gspread.authorize(creds)
 
-def fetch_game_log(save=False):
+def fetch_game_log(parse_cols=False, save=False):
     """
     Fetch current version of master game data.
+    parse_cols : bool
+        parse non-string columns as specific dtypes
     save : bool
         save game log into local directory
     return : pd.DataFrame
@@ -34,6 +39,9 @@ def fetch_game_log(save=False):
     client = init_client()
     worksheet = client.open(SHEET_NAME).worksheet(GAME_LOG)
     df = pd.DataFrame(worksheet.get_all_values()[1:], columns=GAME_LOG_COLS)
+    if parse_cols:
+        df[GAME_LOG_NUM_COLS] = df[GAME_LOG_NUM_COLS].apply(pd.to_numeric)
+        df[DATE] = pd.to_datetime(df[DATE])
     if save:
         df.to_csv(
             GAME_LOG_TSV.format(date.today().strftime("%Y%m%d")),
@@ -124,6 +132,8 @@ def write_player_data(player, data):
         list of player data rows
     return : None
     """
+    if not (player == 'Brian' or player == 'Kate'):
+        return
     client = init_client()
     sheet = client.open(SHEET_NAME)
     
