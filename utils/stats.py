@@ -320,13 +320,15 @@ def player_cnts_all_roles(thresh=SAMPLE_THRESH, norm_axis=-1, rounding=3, df=Non
     
     if norm_axis == -1:
         df["Sample Size"] = df.sum(axis=1)
-        return df[df["Sample Size"] >= thresh]
+        df.index = df.index.rename("Player")
+        return df[df["Sample Size"] >= thresh].reset_index()
     else:
         sample_sizes = df.sum(axis=1)
         df = df.divide(df.sum(axis=norm_axis), axis=(1 - norm_axis))
         df = df.apply(lambda x: np.round(x, rounding))
         df["Sample Size"] = sample_sizes
-        return df[sample_sizes >= thresh]
+        df.index = df.index.rename("Player")
+        return df[sample_sizes >= thresh].reset_index()
 
 def player_pair_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None):
     """
@@ -384,8 +386,9 @@ def player_pair_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None):
     
     df = pd.DataFrame(df, columns=players, index=players)
     df = df.apply(lambda x: np.round(x, rounding))
+    df.index = df.index.rename("Player")
     
-    return df
+    return df.reset_index()
 
 def r1_r2_strat(ex_ch=False, df=None):
     """
