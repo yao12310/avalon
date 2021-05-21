@@ -32,6 +32,7 @@ TEMPLATE = "Template"
 
 MAX_LOYAL = 4
 MAX_ROUNDS = 5
+SAMPLE_THRESH = 5
 
 # data
 

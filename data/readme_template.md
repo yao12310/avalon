@@ -10,7 +10,6 @@ git clone https://github.com/yao12310/avalon.git
 mkdir avalon/keys
 mkdir avalon/data
 mv path/to/key/client.json avalon/keys/
-mv path/to/readme/template/template_readme.md avalon/
 ```
 
 Updating DB:
