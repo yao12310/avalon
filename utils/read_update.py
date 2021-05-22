@@ -24,7 +24,12 @@ def write_stats():
     
     with open(README, 'a') as f:
         f.write("## Stats\n")
-
+        
+        f.write("\n")
+        f.write("Note: The friends and memories made in this game far outweigh any statistic you will find on this page.")
+        f.write("In any case, most of these stats are super high variance—especially individual stats, which depend heavily on team composition.")
+        f.write("\n")
+        
         f.write("\n")
         f.write("**Good win %:**\n")
         f.write("\n")
@@ -91,6 +96,12 @@ def write_stats():
         f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
         
         f.write("\n")
+        f.write("**Games played ranking (minimum 5 games):**\n")
+        f.write("\n")  
+        df = games_played_rank(thresh=SAMPLE_THRESH, df=game_log)
+        f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
+        
+        f.write("\n")
         f.write("**Kate Good Theorem statistics:**\n")
         dfs = kgt_stats()
         for df in dfs:
@@ -107,10 +118,14 @@ def write_stats():
         f.write("\n")
         f.write("Normalized by role (i.e. divided by occcurrences for each role):\n")
         f.write("\n")
+        f.write("*Columns will not necessarily sum to 1 due to players with < 5 games not being included.*\n")
+        f.write("\n")
         df = player_cnts_all_roles(norm_axis=0, df=game_log)
         f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
         f.write("\n")
         f.write("Normalized by player (i.e. divided by games played for each player):\n")
+        f.write("\n")
+        f.write("*Row values should sum to 1.*\n")
         f.write("\n")
         df = player_cnts_all_roles(norm_axis=1, df=game_log)
         f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
@@ -139,6 +154,7 @@ def write_stats():
         f.write("\n")
         f.write("\n*Win percentages are presented as row player vs column player.*")
         f.write("\n")        
+        f.write("\n")
         f.write("Cheesy wins included:\n")
         f.write("\n")  
         df = player_pair_vs_win_pcts(ex_ch=False, df=game_log)
@@ -175,3 +191,22 @@ def write_stats():
         df = r1_fail(True, df=game_log)
         f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
         
+        f.write("\n")
+        f.write("**Flip statistics for different # bad guys and mission index:**\n")
+        f.write("\n")
+        f.write("\n*Excludes Oberon in 10-person games.*")
+        df = flip_win_pcts([1, 2, 3], [2, 3])
+        f.write("\n")
+        f.write("*Overall:*\n")
+        f.write("\n")
+        f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
+        for n in [2, 3]:
+            for mission in [1, 2, 3]:
+                df = flip_win_pcts([mission], [n], df=game_log)
+                if df.empty:
+                    continue
+                f.write("\n")
+                f.write("*{} bad guys on mission {}:*\n".format(n, mission))
+                f.write("\n")
+                f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
+                

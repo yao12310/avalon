@@ -1,3 +1,5 @@
+# TODO: break up into separate utils
+
 """
 Utilities for computing avalon game- and player-level stats.
 """
@@ -195,6 +197,30 @@ def top_win_rates(ex_ch=False, n=5, thresh=SAMPLE_THRESH, df=None):
     ldbrd = ldbrd[ldbrd["Sample Size"] >= thresh]
     ldbrd = ldbrd.sort_values("Win %", ascending=False)
     return ldbrd.iloc[:n].reset_index().drop("index", axis=1)
+
+def games_played_rank(thresh=SAMPLE_THRESH, df=None):
+    """
+    Find ranking of total games played.
+    thresh : int
+        minimum # games played
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+    
+    player_game_cnt = defaultdict(int)
+    for idx, row in df.iterrows():
+        for role in ROLES:
+            player = row[role]
+            if player == NA or player == UNK:
+                continue
+            player_game_cnt[player] += 1
+            
+    player_game_cnt = {player: cnt for player, cnt in player_game_cnt.items() if cnt >= thresh}
+    
+    return pd.DataFrame(player_game_cnt.items(), columns=["Player", "Games Played"]).sort_values("Games Played", ascending=False)
 
 def kgt_stats(ex_ch=False, df=None):
     """
@@ -664,3 +690,43 @@ def r1_fail(ex_ch=False, filter_percival=False, df=None):
     df = [[fail_win / fail_cnt, fail_cnt], [succeed_win / succeed_cnt, succeed_cnt]]
     
     return pd.DataFrame(df, columns=["Win %", "Sample Size"], index=["R1 Fail", "R1 Succeed"])
+
+def flip_win_pcts(missions, ns=2, df=None):
+    """
+    Given that there are n non-Oberon bad guys on a mission, find % chance of failing/successing flip and win %.
+    missions : []int
+        mission indices
+    ns : []int
+        number of bad guys
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+        
+    total = 0
+    fail_cnts = defaultdict(int)
+    good_win_fail_cnts = defaultdict(int)
+    
+    for idx, row in df.iterrows():
+        for mission in missions:
+            bads = set([row[bad] for bad in BADS if bad != OBERON and row[bad] not in [NA, UNK]])
+            team = set(row[TEAM_ROUND.format(mission)].split(', '))
+            fails = set(row[FAILS_ROUND.format(mission)].split(', '))
+            if team in [UTD, UNK, NA] or fails in [UTD, UNK, NA]:
+                continue
+            if len(team.intersection(bads)) in ns:
+                total += 1
+                num_fails = len([fail for fail in fails if fail != 'None'])
+                fail_cnts[num_fails] += 1
+                if row[WINNER] == GOOD:
+                    good_win_fail_cnts[num_fails] += 1
+            
+    return pd.DataFrame(
+        [
+            (num_fails, fail_cnts[num_fails], fail_cnts[num_fails] / total, good_win_fail_cnts[num_fails] / fail_cnts[num_fails])
+            for num_fails in range(max(ns) + 1) if fail_cnts[num_fails]
+        ],
+        columns=["# Fails", "Count", "%", "Good Win %"]
+    )

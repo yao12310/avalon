@@ -14,14 +14,18 @@ mv path/to/key/client.json avalon/keys/
 
 Updating DB:
 ```
-python -m avalon.main db_write --row {comma-separated list of values} --player_write {True/False, optional, default=True}
+python -m avalon.main db_write --row {equals sign-separated list of values, optional} --player_write {True/False, optional, default=True}
 ```
+
+If `--row` is excluded, then the script will prompt you to enter each value one-by-one. (Recommended method.)
 
 Updating README Stats:
 ```
 python -m avalon.main update_stat
 ```
 ## Stats
+
+Note: The friends and memories made in this game far outweigh any statistic you will find on this page.In any case, most of these stats are super high variance—especially individual stats, which depend heavily on team composition.
 
 **Good win %:**
 
@@ -118,6 +122,26 @@ Cheesy wins excluded:
 | Alex     | 0.541667 |     0.363636 |    0.692308 |            24 |
 | Jay      | 0.5      |     0.25     |    0.75     |             8 |
 
+**Games played ranking (minimum 5 games):**
+
+| Player   |   Games Played |
+|----------|----------------|
+| Brian    |             46 |
+| Kate     |             42 |
+| Abishek  |             40 |
+| Sushant  |             35 |
+| Rachel   |             34 |
+| Peter    |             28 |
+| Alex     |             27 |
+| Ruhi     |             23 |
+| Jai      |             19 |
+| Jackie   |             19 |
+| Minh     |             14 |
+| Kish     |             10 |
+| Jay      |              8 |
+| Gathenji |              7 |
+| Ewen     |              6 |
+
 **Kate Good Theorem statistics:**
 | Weak Success   |   Count |   Good Win % |
 |----------------|---------|--------------|
@@ -164,6 +188,8 @@ Total count:
 
 Normalized by role (i.e. divided by occcurrences for each role):
 
+*Columns will not necessarily sum to 1 due to players with < 5 games not being included.*
+
 | Player   |   Merlin |   Percival |   Assassin |   Morgana |   Mordred |   Oberon |   Minion #1 |   Loyal Servant |   Sample Size |
 |----------|----------|------------|------------|-----------|-----------|----------|-------------|-----------------|---------------|
 | Abishek  |    0.085 |      0.128 |      0.089 |     0.114 |     0.108 |    0.273 |           0 |           0.094 |            40 |
@@ -183,6 +209,8 @@ Normalized by role (i.e. divided by occcurrences for each role):
 | Sushant  |    0.17  |      0.043 |      0.067 |     0.045 |     0.108 |    0     |           1 |           0.101 |            35 |
 
 Normalized by player (i.e. divided by games played for each player):
+
+*Row values should sum to 1.*
 
 | Player   |   Merlin |   Percival |   Assassin |   Morgana |   Mordred |   Oberon |   Minion #1 |   Loyal Servant |   Sample Size |
 |----------|----------|------------|------------|-----------|-----------|----------|-------------|-----------------|---------------|
@@ -268,6 +296,7 @@ Cheesy wins excluded:
 
 
 *Win percentages are presented as row player vs column player.*
+
 Cheesy wins included:
 
 | Player   |   Peter |   Minh |   Rachel |   Ewen |   Jai |   Kate |   Sushant |   Abishek |   Ruhi |   Brian |   Jackie |   Kish |   Alex |   Jay |   Gathenji |
@@ -339,3 +368,45 @@ Cheesy wins excluded:
 |----------|---------------|
 | 0.428571 |             7 |
 | 0.318182 |            22 |
+
+**Flip statistics for different # bad guys and mission index:**
+
+
+*Excludes Oberon in 10-person games.*
+*Overall:*
+
+|   # Fails |   Count |        % |   Good Win % |
+|-----------|---------|----------|--------------|
+|         0 |       7 | 0.318182 |     0.428571 |
+|         1 |      10 | 0.454545 |     0.2      |
+|         2 |       5 | 0.227273 |     0.6      |
+
+*2 bad guys on mission 1:*
+
+|   # Fails |   Count |   % |   Good Win % |
+|-----------|---------|-----|--------------|
+|         0 |       3 | 0.6 |            0 |
+|         1 |       2 | 0.4 |            0 |
+
+*2 bad guys on mission 2:*
+
+|   # Fails |   Count |        % |   Good Win % |
+|-----------|---------|----------|--------------|
+|         0 |       3 | 0.428571 |     0.666667 |
+|         1 |       2 | 0.285714 |     0.5      |
+|         2 |       2 | 0.285714 |     0.5      |
+
+*2 bad guys on mission 3:*
+
+|   # Fails |   Count |     % |   Good Win % |
+|-----------|---------|-------|--------------|
+|         0 |       1 | 0.125 |          1   |
+|         1 |       5 | 0.625 |          0.2 |
+|         2 |       2 | 0.25  |          0.5 |
+
+*3 bad guys on mission 2:*
+
+|   # Fails |   Count |   % |   Good Win % |
+|-----------|---------|-----|--------------|
+|         1 |       1 | 0.5 |            0 |
+|         2 |       1 | 0.5 |            1 |
