@@ -132,8 +132,6 @@ def write_player_data(player, data):
         list of player data rows
     return : None
     """
-    if not (player == 'Brian' or player == 'Kate'):
-        return
     client = init_client()
     sheet = client.open(SHEET_NAME)
     
