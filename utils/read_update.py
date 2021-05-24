@@ -197,6 +197,7 @@ def write_stats():
         f.write("\n*Excludes Oberon in 10-person games.*")
         df = flip_win_pcts([1, 2, 3], [2, 3])
         f.write("\n")
+        f.write("\n")
         f.write("*Overall:*\n")
         f.write("\n")
         f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
