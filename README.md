@@ -25,7 +25,7 @@ python -m avalon.main update_stat
 ```
 ## Stats
 
-Note: The friends and memories made in this game far outweigh any statistic you will find on this page.In any case, most of these stats are super high variance—especially individual stats, which depend heavily on team composition.
+Note: The friends and memories made in this game far outweigh any statistic you will find on this page. In any case, most of these stats are super high variance—especially individual stats, which depend heavily on team composition.
 
 **Good win %:**
 
@@ -102,25 +102,27 @@ Cheesy wins excluded:
 
 **Win rate leaderboard (minimum 5 games):**
 
+*Games Behind column reports # games needed to win in a row in order to pass leader.*
+
 Cheesy wins included:
 
-| Player   |    Win % |   Good Win % |   Bad Win % |   Sample Size |
-|----------|----------|--------------|-------------|---------------|
-| Ewen     | 0.833333 |     0.666667 |    1        |             6 |
-| Brian    | 0.693878 |     0.588235 |    0.933333 |            49 |
-| Abishek  | 0.604651 |     0.518519 |    0.75     |            43 |
-| Peter    | 0.516129 |     0.421053 |    0.666667 |            31 |
-| Kish     | 0.5      |     0.428571 |    0.666667 |            10 |
+| Player   |    Win % |   Good Win % |   Bad Win % |   Sample Size |   Wins |   Losses |   Games Behind Ewen |
+|----------|----------|--------------|-------------|---------------|--------|----------|---------------------|
+| Ewen     | 0.833333 |     0.666667 |    1        |             6 |      5 |        1 |                   0 |
+| Brian    | 0.693878 |     0.588235 |    0.933333 |            49 |     34 |       15 |                  42 |
+| Abishek  | 0.604651 |     0.518519 |    0.75     |            43 |     26 |       17 |                  60 |
+| Peter    | 0.516129 |     0.421053 |    0.666667 |            31 |     16 |       15 |                  60 |
+| Alex     | 0.5      |     0.4      |    0.6      |            30 |     15 |       15 |                  61 |
 
 Cheesy wins excluded:
 
-| Player   |    Win % |   Good Win % |   Bad Win % |   Sample Size |
-|----------|----------|--------------|-------------|---------------|
-| Ewen     | 0.833333 |     0.666667 |    1        |             6 |
-| Brian    | 0.659091 |     0.517241 |    0.933333 |            44 |
-| Abishek  | 0.564103 |     0.434783 |    0.75     |            39 |
-| Alex     | 0.518519 |     0.357143 |    0.692308 |            27 |
-| Jay      | 0.5      |     0.25     |    0.75     |             8 |
+| Player   |    Win % |   Good Win % |   Bad Win % |   Sample Size |   Wins |   Losses |   Games Behind Ewen |
+|----------|----------|--------------|-------------|---------------|--------|----------|---------------------|
+| Ewen     | 0.833333 |     0.666667 |    1        |             6 |      5 |        1 |                   0 |
+| Brian    | 0.659091 |     0.517241 |    0.933333 |            44 |     29 |       15 |                  47 |
+| Abishek  | 0.564103 |     0.434783 |    0.75     |            39 |     22 |       17 |                  64 |
+| Alex     | 0.518519 |     0.357143 |    0.692308 |            27 |     14 |       13 |                  52 |
+| Jay      | 0.5      |     0.25     |    0.75     |             8 |      4 |        4 |                  17 |
 
 **Games played ranking (minimum 5 games):**
 
@@ -142,6 +144,27 @@ Cheesy wins excluded:
 | Gathenji |              7 |
 | Ewen     |              6 |
 | Jade     |              5 |
+
+**Percentage good ranking (minimum 5 games):**
+
+| Player   |   Good % |   # Good |   # Bad |
+|----------|----------|----------|---------|
+| Jade     | 1        |        5 |       0 |
+| Gathenji | 0.857143 |        6 |       1 |
+| Jackie   | 0.736842 |       14 |       5 |
+| Kish     | 0.7      |        7 |       3 |
+| Brian    | 0.693878 |       34 |      15 |
+| Sushant  | 0.684211 |       26 |      12 |
+| Jai      | 0.65     |       13 |       7 |
+| Rachel   | 0.647059 |       22 |      12 |
+| Kate     | 0.644444 |       29 |      16 |
+| Minh     | 0.642857 |        9 |       5 |
+| Abishek  | 0.627907 |       27 |      16 |
+| Peter    | 0.612903 |       19 |      12 |
+| Ruhi     | 0.608696 |       14 |       9 |
+| Ewen     | 0.5      |        3 |       3 |
+| Alex     | 0.5      |       15 |      15 |
+| Jay      | 0.5      |        4 |       4 |
 
 **Kate Good Theorem statistics:**
 | Weak Success   |   Count |   Good Win % |
@@ -346,37 +369,37 @@ Cheesy wins excluded:
 | Jay      |   -1    |  -1    |    -1    |     -1 | -1    |   0.8  |      0.8  |     -1    |  -1    |    0.5  |    -1    |  -1    |  -1    |     -1 |  -1   |       -1   |
 | Gathenji |   -1    |  -1    |    -1    |     -1 | -1    |  -1    |     -1    |      0.2  |  -1    |   -1    |    -1    |  -1    |  -1    |     -1 |  -1   |       -1   |
 
-**3+1 vs 2+1 strategy success rate:**
+**3+1 vs 2+2 strategy success rate:**
 
 Cheesy wins included:
 
-|    Win % |   Sample Size |
-|----------|---------------|
-| 0.333333 |             6 |
-| 0.44     |            25 |
+| Strategy   |    Win % |   Sample Size |
+|------------|----------|---------------|
+| 3+1        | 0.333333 |             6 |
+| 2+2        | 0.44     |            25 |
 
 Cheesy wins excluded:
 
-|    Win % |   Sample Size |
-|----------|---------------|
-| 0.2      |             5 |
-| 0.391304 |            23 |
+| Strategy   |    Win % |   Sample Size |
+|------------|----------|---------------|
+| 3+1        | 0.2      |             5 |
+| 2+2        | 0.391304 |            23 |
 
 **Good win rate w.r.t. R1 fail (filtered for cases where bad guy on R1):**
 
 Cheesy wins included:
 
-|    Win % |   Sample Size |
-|----------|---------------|
-| 0.428571 |             7 |
-| 0.36     |            25 |
+| R1 Outcome   |    Win % |   Sample Size |
+|--------------|----------|---------------|
+| Fail         | 0.428571 |             7 |
+| Success      | 0.36     |            25 |
 
 Cheesy wins excluded:
 
-|    Win % |   Sample Size |
-|----------|---------------|
-| 0.428571 |             7 |
-| 0.333333 |            24 |
+| R1 Outcome   |    Win % |   Sample Size |
+|--------------|----------|---------------|
+| Fail         | 0.428571 |             7 |
+| Success      | 0.333333 |            24 |
 
 **Flip statistics for different # bad guys and mission index:**
 
@@ -420,3 +443,32 @@ Cheesy wins excluded:
 |-----------|---------|-----|--------------|
 |         1 |       1 | 0.5 |            0 |
 |         2 |       1 | 0.5 |            1 |
+
+**% of time players are wrongly assassinated as non-Merlin good guy (minimum 5 games good guy):**
+
+*Excludes games where Merlin assassination is unknown.*
+
+| Player   |   Incorrect Assassination % |   # Assassinations |   Sample Size |
+|----------|-----------------------------|--------------------|---------------|
+| Peter    |                   0.428571  |                  3 |             7 |
+| Jackie   |                   0.333333  |                  2 |             6 |
+| Alex     |                   0.3       |                  3 |            10 |
+| Abishek  |                   0.266667  |                  4 |            15 |
+| Rachel   |                   0.142857  |                  1 |             7 |
+| Sushant  |                   0.1       |                  1 |            10 |
+| Kate     |                   0.0714286 |                  1 |            14 |
+| Ruhi     |                   0         |                  0 |             6 |
+| Brian    |                   0         |                  0 |            18 |
+
+**% of time players are correctly assassinated as Merlin (minimum 3 games Merlin):**
+
+| Player   |   Assassination % |   # Assassinations |   Sample Size |
+|----------|-------------------|--------------------|---------------|
+| Minh     |          0        |                  0 |             3 |
+| Sushant  |          0.125    |                  1 |             8 |
+| Brian    |          0.2      |                  1 |             5 |
+| Kate     |          0.2      |                  1 |             5 |
+| Jai      |          0.25     |                  1 |             4 |
+| Abishek  |          0.25     |                  1 |             4 |
+| Peter    |          0.4      |                  2 |             5 |
+| Rachel   |          0.428571 |                  3 |             7 |

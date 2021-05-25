@@ -181,21 +181,46 @@ def top_win_rates(ex_ch=False, n=5, thresh=SAMPLE_THRESH, df=None):
                 else:
                     player_wl[player]['good_l'] += 1
     
-    ldbrd = pd.DataFrame(
-        [
+    ldbrd = []
+    for player in player_wl:
+        if player_wl[player]['good_w'] + player_wl[player]['good_l']:
+            good_win_pct = player_wl[player]['good_w']/ (player_wl[player]['good_w'] + player_wl[player]['good_l'])
+        else:
+            good_win_pct = -1
+            
+        if player_wl[player]['bad_w'] + player_wl[player]['bad_l']:
+            bad_win_pct = player_wl[player]['bad_w'] / (player_wl[player]['bad_w'] + player_wl[player]['bad_l'])
+        else:
+            bad_win_pct = -1
+            
+        ldbrd.append(
             (
                 player,
                 (player_wl[player]['good_w'] + player_wl[player]['bad_w']) / sum(player_wl[player].values()),
-                player_wl[player]['good_w'] / (player_wl[player]['good_w'] + player_wl[player]['good_l']),
-                player_wl[player]['bad_w'] / (player_wl[player]['bad_w'] + player_wl[player]['bad_l']),
-                sum(player_wl[player].values())
-            ) for player in player_wl if ((player_wl[player]['good_w'] + player_wl[player]['good_l']) and 
-                                          (player_wl[player]['bad_w'] + player_wl[player]['bad_l']))
-        ],
-        columns=("Player", "Win %", "Good Win %", "Bad Win %", "Sample Size")
-    )
+                good_win_pct,
+                bad_win_pct,
+                sum(player_wl[player].values()),
+                player_wl[player]['good_w'] + player_wl[player]['bad_w'],
+                player_wl[player]['good_l'] + player_wl[player]['bad_l']
+            )
+        )
+    
+    ldbrd = pd.DataFrame(ldbrd, columns=("Player", "Win %", "Good Win %", "Bad Win %", "Sample Size", "Wins", "Losses"))
     ldbrd = ldbrd[ldbrd["Sample Size"] >= thresh]
-    ldbrd = ldbrd.sort_values("Win %", ascending=False)
+    ldbrd = ldbrd.sort_values(["Win %", "Sample Size"], ascending=False)
+    
+    top_player = ldbrd["Player"].iloc[0]
+    top_wins = ldbrd["Wins"].iloc[0]
+    top_losses = ldbrd["Losses"].iloc[0]
+    games_behind = [0]
+    for i in range(1, ldbrd.shape[0]):
+        curr_wins = ldbrd["Wins"].iloc[i]
+        curr_losses = ldbrd["Losses"].iloc[i]
+        behind = (top_wins * (curr_wins + curr_losses) - curr_wins * (top_wins + top_losses)) / top_losses
+        games_behind.append(int(behind + 1))
+        
+    ldbrd["Games Behind {}".format(top_player)] = games_behind
+    
     return ldbrd.iloc[:n].reset_index().drop("index", axis=1)
 
 def games_played_rank(thresh=SAMPLE_THRESH, df=None):
@@ -222,6 +247,35 @@ def games_played_rank(thresh=SAMPLE_THRESH, df=None):
     
     return pd.DataFrame(player_game_cnt.items(), columns=["Player", "Games Played"]).sort_values("Games Played", ascending=False)
 
+def good_pct_rank(thresh=SAMPLE_THRESH, df=None):
+    """
+    Find ranking of good team %.
+    thresh : int
+        minimum # games played
+    df : pd.DataFrame
+        game data llog (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+        
+    player_good_cnt = defaultdict(int)
+    player_game_cnt = defaultdict(int)
+    
+    for idx, row in df.iterrows():
+        for role in ROLES:
+            player = row[role]
+            if player == NA or player == UNK:
+                continue
+            player_game_cnt[player] += 1
+            if role not in BADS:
+                player_good_cnt[player] += 1
+                
+    player_good_pct = [(player, player_good_cnt[player] / cnt, player_good_cnt[player], cnt - player_good_cnt[player]) 
+                           for player, cnt in player_game_cnt.items() if cnt >= thresh]
+    
+    return pd.DataFrame(player_good_pct, columns=["Player", "Good %", "# Good", "# Bad"]).sort_values("Good %", ascending=False)
+    
 def kgt_stats(ex_ch=False, df=None):
     """
     Compute KGT-related win statistics.
@@ -635,9 +689,9 @@ def r1_r2_strat(ex_ch=False, df=None):
             if row[WINNER] == GOOD:
                 twotwo_win += 1
     
-    df = [[threeone_win / threeone_cnt, threeone_cnt], [twotwo_win / twotwo_cnt, twotwo_cnt]]
+    df = [["3+1", threeone_win / threeone_cnt, threeone_cnt], ["2+2", twotwo_win / twotwo_cnt, twotwo_cnt]]
     
-    return pd.DataFrame(df, columns=["Win %", "Sample Size"], index=["3+1", "2+2"])
+    return pd.DataFrame(df, columns=["Strategy", "Win %", "Sample Size"])
 
 def r1_fail(ex_ch=False, filter_percival=False, df=None):
     """
@@ -687,9 +741,9 @@ def r1_fail(ex_ch=False, filter_percival=False, df=None):
             if row[WINNER] == GOOD:
                 succeed_win += 1
 
-    df = [[fail_win / fail_cnt, fail_cnt], [succeed_win / succeed_cnt, succeed_cnt]]
+    df = [["Fail", fail_win / fail_cnt, fail_cnt], ["Success", succeed_win / succeed_cnt, succeed_cnt]]
     
-    return pd.DataFrame(df, columns=["Win %", "Sample Size"], index=["R1 Fail", "R1 Succeed"])
+    return pd.DataFrame(df, columns=["R1 Outcome", "Win %", "Sample Size"])
 
 def flip_win_pcts(missions, ns=2, df=None):
     """
@@ -730,3 +784,100 @@ def flip_win_pcts(missions, ns=2, df=None):
         ],
         columns=["# Fails", "Count", "%", "Good Win %"]
     )
+
+def merlin_assassination_n_players(df=None):
+    """
+    Find percentage of time Merlin is assassinated w.r.t. game size.
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+        
+    num_games = defaultdict(int)
+    num_assassinations = defaultdict(int)
+    for idx, row in df.iterrows():
+        num_players = row[NUM_PLAYERS]
+        num_games[num_players] += 1
+        if row[MERLIN] == row[ASSASSINATION]:
+            num_assassinations[num_players] += 1
+            
+    return pd.DataFrame(
+        [(num_players, num_assassinations[num_players] / num_games[num_players], num_games[num_players]) for num_players in num_games],
+        columns=["# Players", "Merlin Assassination %", "Sample Size"]
+    ).sort_values("# Players")
+    
+def wrong_assassination_player(thresh=SAMPLE_THRESH, df=None):
+    """
+    As a non-Merlin good guy, find how often each player is incorrectly assassinated.
+    thresh : int
+        minimum number of good guy games
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+        
+    num_games = defaultdict(int)
+    num_assassinations = defaultdict(int)
+    for idx, row in df.iterrows():
+        if row[ASSASSINATION] in [UNK, NA]:
+            continue
+        for role in ROLES:
+            if role in BADS or role == MERLIN:
+                continue
+            if row[role] in [UNK, NA]:
+                continue
+            num_games[row[role]] += 1
+            
+        if row[MERLIN] != row[ASSASSINATION]:
+            num_assassinations[row[ASSASSINATION]] += 1
+            
+    return pd.DataFrame(
+        [
+            (
+                player, 
+                num_assassinations[player] / num_games[player], 
+                num_assassinations[player], 
+                num_games[player]
+            ) for player in num_games if num_games[player] >= thresh
+        ],
+        columns=["Player", "Incorrect Assassination %", "# Assassinations", "Sample Size"]
+    ).sort_values("Incorrect Assassination %", ascending=False)
+
+def correct_assassination_player(thresh=SAMPLE_THRESH, df=None):
+    """
+    As Merlin, find how often each player is assassinated.
+    thresh : int
+        minimum number of Merlin games
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+        
+    num_games = defaultdict(int)
+    num_assassinations = defaultdict(int)
+    for idx, row in df.iterrows():
+        merlin = row[MERLIN]
+        if merlin in [NA, UNK]:
+            continue
+            
+        num_games[merlin] += 1
+        if row[ASSASSINATION] == merlin:
+            num_assassinations[merlin] += 1
+            
+    return pd.DataFrame(
+        [
+            (
+                player, 
+                num_assassinations[player] / num_games[player], 
+                num_assassinations[player], 
+                num_games[player]
+            ) for player in num_games if num_games[player] >= thresh
+        ],
+        columns=["Player", "Assassination %", "# Assassinations", "Sample Size"]
+    ).sort_values("Assassination %")

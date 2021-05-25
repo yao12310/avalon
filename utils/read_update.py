@@ -26,7 +26,7 @@ def write_stats():
         f.write("## Stats\n")
         
         f.write("\n")
-        f.write("Note: The friends and memories made in this game far outweigh any statistic you will find on this page.")
+        f.write("Note: The friends and memories made in this game far outweigh any statistic you will find on this page. ")
         f.write("In any case, most of these stats are super high variance—especially individual stats, which depend heavily on team composition.")
         f.write("\n")
         
@@ -85,6 +85,8 @@ def write_stats():
         f.write("\n")
         f.write("**Win rate leaderboard (minimum 5 games):**\n")
         f.write("\n")
+        f.write("*Games Behind column reports # games needed to win in a row in order to pass leader.*\n")
+        f.write("\n")
         f.write("Cheesy wins included:\n")
         f.write("\n")  
         df = top_win_rates(False, df=game_log)
@@ -99,6 +101,12 @@ def write_stats():
         f.write("**Games played ranking (minimum 5 games):**\n")
         f.write("\n")  
         df = games_played_rank(thresh=SAMPLE_THRESH, df=game_log)
+        f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
+        
+        f.write("\n")
+        f.write("**Percentage good ranking (minimum 5 games):**\n")
+        f.write("\n")  
+        df = good_pct_rank(thresh=SAMPLE_THRESH, df=game_log)
         f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
         
         f.write("\n")
@@ -166,7 +174,7 @@ def write_stats():
         f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
         
         f.write("\n")
-        f.write("**3+1 vs 2+1 strategy success rate:**\n")
+        f.write("**3+1 vs 2+2 strategy success rate:**\n")
         f.write("\n")
         f.write("Cheesy wins included:\n")
         f.write("\n")  
@@ -210,4 +218,18 @@ def write_stats():
                 f.write("*{} bad guys on mission {}:*\n".format(n, mission))
                 f.write("\n")
                 f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
-                
+        
+        f.write("\n")
+        f.write("**% of time players are wrongly assassinated as non-Merlin good guy (minimum 5 games good guy):**\n")
+        f.write("\n")
+        f.write("*Excludes games where Merlin assassination is unknown.*\n")
+        f.write("\n")  
+        df = wrong_assassination_player(df=game_log)
+        f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
+        
+        f.write("\n")
+        f.write("**% of time players are correctly assassinated as Merlin (minimum 3 games Merlin):**\n")
+        f.write("\n")  
+        df = correct_assassination_player(thresh=3, df=game_log)
+        f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
+        
