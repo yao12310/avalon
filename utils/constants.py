@@ -30,9 +30,18 @@ TEMPLATE = "Template"
 
 # game metadata
 
+SIZES = [5, 6, 7, 8, 9, 10]
 MAX_LOYAL = 4
 MAX_ROUNDS = 5
 SAMPLE_THRESH = 5
+GOOD_WIN_RATES_BALANCE = {
+    5: .4,
+    6: 1 / 3,
+    7: 3 / 7,
+    8: .375,
+    9: 1 / 3,
+    10: .4
+}
 
 # data
 

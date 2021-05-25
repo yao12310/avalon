@@ -7,6 +7,7 @@ Utilities for computing avalon game- and player-level stats.
 import sys
 
 from collections import defaultdict
+from itertools import product
 
 import numpy as np
 import pandas as pd
@@ -144,7 +145,7 @@ def top_win_rates(ex_ch=False, n=5, thresh=SAMPLE_THRESH, df=None):
     ex_ch : bool
         exclude cheesy wins
     n : int
-        leaderboard size
+        leaderboard size (if -1, use full leaderboard)
     thresh : int
         minimum # games played
     df : pd.DataFrame
@@ -221,7 +222,118 @@ def top_win_rates(ex_ch=False, n=5, thresh=SAMPLE_THRESH, df=None):
         
     ldbrd["Games Behind {}".format(top_player)] = games_behind
     
+    if n == -1:
+        n = ldbrd.shape[0]
+    
     return ldbrd.iloc[:n].reset_index().drop("index", axis=1)
+
+def win_pct_ev(ex_ch=False, use_theoretical_rates=False, thresh=SAMPLE_THRESH, df=None):
+    """
+    Find expected win rates of players (controlling for game size / # games as good or bad).
+    ex_ch : bool
+        exclude cheesy wins
+    use_theoretical_rates : bool
+        use theoretical good win rates, or rates from data
+    thresh : int
+        minimum # games played
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+    
+    d_keys = list(product(SIZES, [GOOD, BAD]))
+    player_size_team_cnts = defaultdict(lambda: dict(zip(d_keys, [0] * len(d_keys)))) # dict[str, dict[(int, str), int]]
+    player_game_cnts = defaultdict(int)
+    for idx, row in df.iterrows():
+        if ex_ch and row[CHEESY_WIN] == "Yes":
+            continue
+        num_players = row[NUM_PLAYERS]
+        for role in ROLES:
+            player = row[role]
+            if player in [NA, UNK]:
+                continue
+            player_game_cnts[player] += 1
+            if role in BADS:
+                player_size_team_cnts[player][(num_players, BAD)] += 1
+            else:
+                player_size_team_cnts[player][(num_players, GOOD)] += 1
+    
+    if use_theoretical_rates:
+        good_win_rates = GOOD_WIN_RATES_BALANCE
+    else:
+        good_win_rates = good_win_rates_n_players(ex_ch=ex_ch, df=df)[["# Players", "Good Win %"]] \
+                             .set_index("# Players") \
+                             .to_dict()["Good Win %"]
+    
+    player_size_good_pcts = {}
+    player_size_bad_pcts = {}
+    for player in player_size_team_cnts:
+        player_size_good_pcts[player] = defaultdict(
+            int,
+            {
+                key[0]: player_size_team_cnts[player][key] / player_game_cnts[player]
+                    for key in player_size_team_cnts[player] if GOOD in key
+            }
+        )
+        player_size_bad_pcts[player] = defaultdict(
+            int,
+            {
+                key[0]: player_size_team_cnts[player][key] / player_game_cnts[player]
+                    for key in player_size_team_cnts[player] if BAD in key
+            }
+        )
+        
+    player_win_pct_evs = {}
+    for player in player_size_good_pcts:
+        if player_game_cnts[player] < thresh:
+            continue
+        ev = 0
+        for size in player_size_good_pcts[player]:
+            if size not in good_win_rates:
+                continue
+            ev += player_size_good_pcts[player][size] * good_win_rates[size] + player_size_bad_pcts[player][size] * (1 - good_win_rates[size])
+        
+        player_win_pct_evs[player] = ev
+            
+    return pd.DataFrame(player_win_pct_evs.items(), columns=["Player", "Expected Win %"]).sort_values("Expected Win %", ascending=False)
+
+def win_pct_over_ev_rank(ex_ch=False, n=5, use_theoretical_rates=False, thresh=SAMPLE_THRESH, df=None):
+    """
+    Find expected win rates of players (controlling for game size / # games as good or bad).
+    ex_ch : bool
+        exclude cheesy wins
+    n : int
+        leaderboard size (if -1, use full leaderboard)
+    use_theoretical_rates : bool
+        use theoretical good win rates, or rates from data
+    thresh : int
+        minimum # games played
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    win_pcts = top_win_rates(ex_ch=ex_ch, n=-1, thresh=SAMPLE_THRESH, df=df).set_index("Player")
+    win_evs = win_pct_ev(ex_ch=ex_ch, use_theoretical_rates=use_theoretical_rates, thresh=thresh, df=df).set_index("Player")
+    team_cnts = good_pct_rank(thresh=thresh, df=df).set_index("Player")
+    
+    ev_score = [
+        (
+            player,
+            win_pcts.loc[player]["Win %"] - win_evs.loc[player]["Expected Win %"],
+            win_pcts.loc[player]["Win %"],
+            win_evs.loc[player]["Expected Win %"],
+            team_cnts.loc[player]["Good %"]
+        ) for player in win_evs.index
+    ]
+    
+    if n == -1:
+        n = len(ev_score)
+    
+    return pd.DataFrame(ev_score, columns=["Player", "Win % Over Expected", "Win %", "Expected Win %", "Good %"]) \
+               .sort_values("Win % Over Expected", ascending=False) \
+               .iloc[:n]
 
 def games_played_rank(thresh=SAMPLE_THRESH, df=None):
     """

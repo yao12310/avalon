@@ -98,6 +98,23 @@ def write_stats():
         f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
         
         f.write("\n")
+        f.write("**Win rate over expected value leaderboard (minimum 5 games):**\n")
+        f.write("\n")
+        f.write("*Expected value computed based on good/bad % for different game sizes.*\n")
+        f.write("\n")
+        f.write("Cheesy wins included:\n")
+        f.write("\n")  
+        df = win_pct_over_ev_rank(ex_ch=False, n=-1, df=game_log)
+        df = df[df["Win % Over Expected"] > .01]
+        f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
+        f.write("\n")
+        f.write("Cheesy wins excluded:\n")
+        f.write("\n")
+        df = win_pct_over_ev_rank(ex_ch=True, n=-1, df=game_log)
+        df = df[df["Win % Over Expected"] > .01]
+        f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
+        
+        f.write("\n")
         f.write("**Games played ranking (minimum 5 games):**\n")
         f.write("\n")  
         df = games_played_rank(thresh=SAMPLE_THRESH, df=game_log)

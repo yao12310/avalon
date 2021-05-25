@@ -124,6 +124,30 @@ Cheesy wins excluded:
 | Alex     | 0.518519 |     0.357143 |    0.692308 |            27 |     14 |       13 |                  52 |
 | Jay      | 0.5      |     0.25     |    0.75     |             8 |      4 |        4 |                  17 |
 
+**Win rate over expected value leaderboard (minimum 5 games):**
+
+*Expected value computed based on good/bad % for different game sizes.*
+
+Cheesy wins included:
+
+| Player   |   Win % Over Expected |    Win % |   Expected Win % |   Good % |
+|----------|-----------------------|----------|------------------|----------|
+| Ewen     |             0.335116  | 0.833333 |         0.498217 | 0.5      |
+| Brian    |             0.212255  | 0.693878 |         0.481623 | 0.693878 |
+| Abishek  |             0.0716973 | 0.604651 |         0.532954 | 0.627907 |
+| Kish     |             0.0544786 | 0.5      |         0.445521 | 0.7      |
+| Peter    |             0.0377012 | 0.516129 |         0.478428 | 0.612903 |
+| Kate     |             0.0162974 | 0.488889 |         0.472591 | 0.644444 |
+
+Cheesy wins excluded:
+
+| Player   |   Win % Over Expected |    Win % |   Expected Win % |   Good % |
+|----------|-----------------------|----------|------------------|----------|
+| Ewen     |             0.338889  | 0.833333 |         0.494444 | 0.5      |
+| Brian    |             0.206439  | 0.659091 |         0.452652 | 0.693878 |
+| Abishek  |             0.0553419 | 0.564103 |         0.508761 | 0.627907 |
+| Peter    |             0.0244253 | 0.482759 |         0.458333 | 0.612903 |
+
 **Games played ranking (minimum 5 games):**
 
 | Player   |   Games Played |
