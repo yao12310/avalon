@@ -5,6 +5,7 @@ Entry point script.
 import argparse
 
 from .utils.constants import GAME_LOG_COLS
+from .utils.constants import NA
 from .utils.sheets import write_game_log
 from .utils.read_update import write_stats
 
@@ -14,7 +15,7 @@ def main_db_write(args):
     else:
         data = []
         for col in GAME_LOG_COLS:
-            data.append(input("{}: ".format(col)))
+            data.append(input("{}: ".format(col)) or NA)
         
     player_write = args.player_write
     write_game_log([data], player_write)

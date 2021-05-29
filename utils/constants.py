@@ -83,6 +83,12 @@ STRONG_KGT_SUCCESS = "Strong KGT Success"
 
 LENGTH = "Length (minutes)"
 
+LADY_OF_THE_LAKE = "Lady of the Lake"
+LOTL_TESTER = "R{} Tester"
+LOTL_TESTED = "R{} Tested"
+LOTL_CLAIM = "R{} Claim"
+LOTL_GROUP = "R{} Group Dec"
+
 GAME_LOG_COLS = (
     [DATE, GAME_INDEX, NUM_PLAYERS] + # identifiers
     ROLES + # role info
@@ -90,7 +96,9 @@ GAME_LOG_COLS = (
     [SUCCESSES, FAILS, ASSASSINATION, WINNER, GOOD_WIN, CHEESY_WIN] + # outcomes
     [NUM_PERCIVAL, FAKE_PERCIVAL] + # percival data
     [WEAK_KGT_APPLY, WEAK_KGT_SUCCESS, STRONG_KGT_APPLY, STRONG_KGT_SUCCESS] + # kgt info
-    [LENGTH] # misc
+    [LENGTH] + # misc
+    [LADY_OF_THE_LAKE] + 
+    [name.format(round_idx) for round_idx in range(2, MAX_ROUNDS) for name in [LOTL_TESTER, LOTL_TESTED, LOTL_CLAIM, LOTL_GROUP]] # lotl
 )
 
 GAME_LOG_NUM_COLS = [GAME_INDEX, NUM_PLAYERS, SUCCESSES, FAILS, GOOD_WIN, NUM_PERCIVAL, LENGTH]
