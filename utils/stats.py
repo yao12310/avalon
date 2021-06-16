@@ -134,6 +134,8 @@ def carries(df=None):
     if df is None:
         df = fetch_game_log(parse_cols=True)
     df = df[~df[fails_col].isin([NA, UTD, 'None'])]
+    # only counts as a carry if there was only one fail
+    df = df[df[fails_col].apply(lambda fails: len(fails.split(', ')) == 1)]
     df = df[[GAME_INDEX, fails_col]].groupby(fails_col).count()
     df = df.reset_index()
     df.columns = ["Player", "# Carries"]
