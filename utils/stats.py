@@ -1242,6 +1242,8 @@ def correct_assassination_player(thresh=SAMPLE_THRESH, df=None):
         merlin = row[MERLIN]
         if merlin in [NA, UNK]:
             continue
+        if row[ASSASSINATION] == NA: # discount games where assassination was not reached
+            continue
             
         num_games[merlin] += 1
         if row[ASSASSINATION] == merlin:

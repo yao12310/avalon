@@ -867,15 +867,15 @@ Cheesy wins excluded:
 
 ### <a id="role-fake-percival"></a>Percentage of time each role fake claims Percival
 
-|   Fake Percival Claim % |   Sample Size |   # Fake Claims |
-|-------------------------|---------------|-----------------|
-|                 0.11881 |           101 |              12 |
-|                 0.04255 |            94 |               4 |
-|                 0.0297  |           101 |               3 |
-|                 0.01389 |            72 |               1 |
-|                 0       |           321 |               0 |
-|                 0       |            28 |               0 |
-|                 0       |            15 |               0 |
+| Role          |   Fake Percival Claim % |   Sample Size |   # Fake Claims |
+|---------------|-------------------------|---------------|-----------------|
+| Merlin        |                 0.11881 |           101 |              12 |
+| Assassin      |                 0.04255 |            94 |               4 |
+| Morgana       |                 0.0297  |           101 |               3 |
+| Mordred       |                 0.01389 |            72 |               1 |
+| Loyal Servant |                 0       |           321 |               0 |
+| Oberon        |                 0       |            28 |               0 |
+| Minion #1     |                 0       |            15 |               0 |
 
 ### <a id="wrongly-assassinated"></a>% of time players are wrongly assassinated as non-Merlin good guy (minimum 5 games won as good guy)
 
@@ -897,17 +897,15 @@ Cheesy wins excluded:
 
 | Player   |   Assassination % |   # Assassinations |   Sample Size |
 |----------|-------------------|--------------------|---------------|
-| Jade     |         0         |                  0 |             3 |
-| Minh     |         0         |                  0 |             5 |
-| Sushant  |         0.0909091 |                  1 |            11 |
-| Brian    |         0.0909091 |                  1 |            11 |
-| Jai      |         0.25      |                  1 |             4 |
-| Jackie   |         0.285714  |                  2 |             7 |
-| Rachel   |         0.363636  |                  4 |            11 |
-| Kate     |         0.4       |                  4 |            10 |
-| Abishek  |         0.4       |                  4 |            10 |
-| Alex     |         0.5       |                  2 |             4 |
-| Peter    |         0.545455  |                  6 |            11 |
+| Brian    |          0.125    |                  1 |             8 |
+| Sushant  |          0.142857 |                  1 |             7 |
+| Jai      |          0.333333 |                  1 |             3 |
+| Kate     |          0.444444 |                  4 |             9 |
+| Rachel   |          0.5      |                  4 |             8 |
+| Abishek  |          0.5      |                  4 |             8 |
+| Jackie   |          0.5      |                  2 |             4 |
+| Peter    |          0.6      |                  6 |            10 |
+| Alex     |          0.666667 |                  2 |             3 |
 
 ### <a id="assassination-game-size"></a>% of time Merlin is assassinated by game size
 
