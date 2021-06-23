@@ -159,7 +159,7 @@ def write_stats():
         f.write("\n*Cheesy wins excluded.*")
         f.write("\n")
         f.write("\n")
-        for role in ROLES:
+        for role in ROLES + [LOYAL_SERVANT]:
             if role in [OBERON, MINION] + LOYALS:
                 continue
             df = top_win_rates_role(role, ex_ch=True, df=game_log_competitive)

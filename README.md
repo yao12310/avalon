@@ -287,6 +287,16 @@ Cheesy wins excluded:
 | Rachel   | 0.833333 |             6 |      5 |        1 |                 nan |
 | Sushant  | 0.666667 |             6 |      4 |        2 |                 nan |
 
+*Loyal Servant:*
+
+| Player   |    Win % |   Sample Size |   Wins |   Losses |   Games Behind Abishek |
+|----------|----------|---------------|--------|----------|------------------------|
+| Abishek  | 0.545455 |            22 |     12 |       10 |                      0 |
+| Rachel   | 0.434783 |            23 |     10 |       13 |                      6 |
+| Brian    | 0.424242 |            33 |     14 |       19 |                      9 |
+| Peter    | 0.421053 |            19 |      8 |       11 |                      6 |
+| Alex     | 0.421053 |            19 |      8 |       11 |                      6 |
+
 ### <a id="games-played"></a>Games played ranking (minimum 5 games)
 
 | Player   |   Games Played |
