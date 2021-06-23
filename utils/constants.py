@@ -49,6 +49,7 @@ GOOD_WIN_RATES_BALANCE = {
 DATE = "Date"
 GAME_INDEX = "Game Index"
 NUM_PLAYERS = "# Players"
+NON_COMPETITIVE = "Non-Competitive"
 
 MERLIN = "Merlin"
 PERCIVAL = "Percival"
@@ -58,6 +59,7 @@ MORDRED = "Mordred"
 OBERON = "Oberon"
 MINION = "Minion #1"
 LOYAL = "Loyal #{}" # idx
+LOYAL_SERVANT = "Loyal Servant"
 
 BADS = [ASSASSIN, MORGANA, MORDRED, OBERON, MINION]
 LOYALS = [LOYAL.format(idx) for idx in range(1, MAX_LOYAL + 1)]
@@ -90,7 +92,7 @@ LOTL_CLAIM = "R{} Claim"
 LOTL_GROUP = "R{} Group Dec"
 
 GAME_LOG_COLS = (
-    [DATE, GAME_INDEX, NUM_PLAYERS] + # identifiers
+    [DATE, GAME_INDEX, NUM_PLAYERS, NON_COMPETITIVE] + # identifiers
     ROLES + # role info
     [name.format(round_idx) for round_idx in range(1, MAX_ROUNDS + 1) for name in [TEAM_ROUND, FAILS_ROUND]] +
     [SUCCESSES, FAILS, ASSASSINATION, WINNER, GOOD_WIN, CHEESY_WIN] + # outcomes

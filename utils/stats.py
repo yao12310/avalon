@@ -67,36 +67,6 @@ def good_win_rates_n_players(ex_ch=False, df=None):
     
     return df.reset_index()
 
-def good_win_rates_n_percivals(ex_ch=False, df=None):
-    """
-    Compute win rate of good team w.r.t. number of percival claims
-    ex_ch : bool
-        exclude cheesy wins
-    df : pd.DataFrame
-        game data log (if None, fetch from API)
-    return : pd.DataFrame
-    """
-    if df is None:
-        df = fetch_game_log(parse_cols=True)
-    if ex_ch:
-        df = df[~(df[CHEESY_WIN] == 'Yes')]
-    df = df[[GAME_INDEX, GOOD_WIN, NUM_PERCIVAL]].groupby(NUM_PERCIVAL) \
-            .agg(
-                    {
-                        GAME_INDEX: 'count',
-                        GOOD_WIN: 'mean'
-                    }
-                ) \
-            .rename(
-                {
-                    GAME_INDEX: "Sample Size",
-                    GOOD_WIN: "Good Win %"
-                },
-                axis=1
-            )
-    
-    return df.reset_index()
-
 def win_lengths(ex_ch=False, df=None):
     """
     Compute mean/sd length of games won by good and bad teams.
@@ -139,6 +109,7 @@ def carries(df=None):
     df = df[[GAME_INDEX, fails_col]].groupby(fails_col).count()
     df = df.reset_index()
     df.columns = ["Player", "# Carries"]
+    df = df.sort_values("# Carries", ascending=False)
     return df
 
 def top_win_rates(ex_ch=False, n=5, thresh=SAMPLE_THRESH, df=None):
@@ -221,6 +192,102 @@ def top_win_rates(ex_ch=False, n=5, thresh=SAMPLE_THRESH, df=None):
         curr_losses = ldbrd["Losses"].iloc[i]
         behind = (top_wins * (curr_wins + curr_losses) - curr_wins * (top_wins + top_losses)) / top_losses
         games_behind.append(int(behind + 1))
+        
+    ldbrd["Games Behind {}".format(top_player)] = games_behind
+    
+    if n == -1:
+        n = ldbrd.shape[0]
+    
+    return ldbrd.iloc[:n].reset_index().drop("index", axis=1)
+
+def top_win_rates_role(role, ex_ch=False, n=5, thresh=SAMPLE_THRESH, df=None):
+    """
+    Compute win rate leaderboard for given role.
+    role : str
+        game role
+    ex_ch : bool
+        exclude cheesy wins
+    n : int
+        leaderboard size (if -1, use full leaderboard)
+    thresh : int
+        minimum # games played
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return pd.DataFrame
+    """
+    assert(role in ROLES or role == LOYAL_SERVANT)
+    player_wl = defaultdict(
+        lambda: {
+            'wins': 0,
+            'losses': 0
+        }
+    )
+    
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+    if ex_ch:
+        df = df[~(df[CHEESY_WIN] == 'Yes')]
+        
+    for idx, row in df.iterrows():
+        if role == LOYAL_SERVANT:
+            players = [row[loyal] for loyal in LOYALS if row[loyal] not in [NA, UNK]]
+            if row[WINNER] == GOOD:
+                for player in players:
+                    player_wl[player]['wins'] += 1
+            else:
+                for player in players:
+                    player_wl[player]['losses'] += 1
+        elif role in BADS:
+            player = row[role]
+            if player == NA:
+                continue
+            if row[WINNER] == BAD:
+                player_wl[player]['wins'] += 1
+            else:
+                player_wl[player]['losses'] += 1
+        else:
+            player = row[role]
+            if player == NA:
+                continue
+            if row[WINNER] == GOOD:
+                player_wl[player]['wins'] += 1
+            else:
+                player_wl[player]['losses'] += 1
+    
+    ldbrd = []
+    for player in player_wl:
+        if player_wl[player]['wins'] + player_wl[player]['losses']:
+            win_pct = player_wl[player]['wins']/ (player_wl[player]['wins'] + player_wl[player]['losses'])
+        else:
+            win_pct = -1
+            
+        ldbrd.append(
+            (
+                player,
+                win_pct,
+                sum(player_wl[player].values()),
+                player_wl[player]['wins'],
+                player_wl[player]['losses']
+            )
+        )
+    
+    ldbrd = pd.DataFrame(ldbrd, columns=("Player", "Win %", "Sample Size", "Wins", "Losses"))
+    ldbrd = ldbrd[ldbrd["Sample Size"] >= thresh]
+    ldbrd = ldbrd.sort_values(["Win %", "Sample Size"], ascending=False)
+    
+    top_player = ldbrd["Player"].iloc[0]
+    top_wins = ldbrd["Wins"].iloc[0]
+    top_losses = ldbrd["Losses"].iloc[0]
+    games_behind = [0]
+    for i in range(1, ldbrd.shape[0]):
+        curr_wins = ldbrd["Wins"].iloc[i]
+        curr_losses = ldbrd["Losses"].iloc[i]
+        if top_losses:
+            behind = (top_wins * (curr_wins + curr_losses) - curr_wins * (top_wins + top_losses)) / top_losses
+            games_behind.append(int(behind + 1))
+        else:
+            games_behind.append(np.nan)
+        
         
     ldbrd["Games Behind {}".format(top_player)] = games_behind
     
@@ -524,7 +591,7 @@ def player_cnts_all_roles(thresh=SAMPLE_THRESH, norm_axis=-1, rounding=3, df=Non
         df.index = df.index.rename("Player")
         return df[sample_sizes >= thresh].reset_index()
 
-def player_pair_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None):
+def player_pair_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None, bad=False):
     """
     Compute percentage of times two players have been on the same team.
     thresh : int
@@ -535,6 +602,8 @@ def player_pair_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None):
         exclude cheesy wins
     df : pd.DataFrame
         game data log (if None, fetch from API)
+    bad : bool
+        only count bad team games
     return : pd.DataFrame
     """
     if df is None:
@@ -557,7 +626,8 @@ def player_pair_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None):
                     continue
 
                 player_pair_game_cnts[player1][player2] += 1
-
+                if bad and (role1 not in BADS or role2 not in BADS):
+                    continue
                 if role1 in BADS and role2 not in BADS:
                     continue
                 if role1 not in BADS and role2 in BADS:
@@ -565,14 +635,19 @@ def player_pair_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None):
 
                 player_pair_team_cnts[player1][player2] += 1
                 
+    insuff_data = []
+    for player1 in player_pair_game_cnts:
+        if all(player_pair_game_cnts[player1][player2] < thresh for player2 in player_pair_game_cnts[player1]):
+            insuff_data.append(player1)
+    
     df = []
     players = list(player_pair_game_cnts.keys())
-    players = list(filter(lambda p: player_cnts[p] >= thresh, players))
+    players = list(filter(lambda p: player_cnts[p] >= thresh and p not in insuff_data, players))
     for p1 in players:
         df.append([])
         for p2 in players:
             if p1 == p2:
-                df[-1].append(-1)
+                df[-1].append(1.0 if not bad else -1)
             elif player_pair_game_cnts[p1][p2] >= thresh:
                 df[-1].append(player_pair_team_cnts[p1][p2] / player_pair_game_cnts[p1][p2])
             else:
@@ -586,7 +661,7 @@ def player_pair_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None):
 
 def player_pair_opp_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None):
     """
-    Compute percentage of times two players have been on the same team.
+    Compute percentage of times two players have been on opposite teams.
     thresh : int
         minimum number of games both players were in the same game
     rounding : int
@@ -625,14 +700,19 @@ def player_pair_opp_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None)
 
                 player_pair_team_cnts[player1][player2] += 1
                 
+    insuff_data = []
+    for player1 in player_pair_game_cnts:
+        if all(player_pair_game_cnts[player1][player2] < thresh for player2 in player_pair_game_cnts[player1]):
+            insuff_data.append(player1)
+    
     df = []
     players = list(player_pair_game_cnts.keys())
-    players = list(filter(lambda p: player_cnts[p] >= thresh, players))
+    players = list(filter(lambda p: player_cnts[p] >= thresh and p not in insuff_data, players))
     for p1 in players:
         df.append([])
         for p2 in players:
             if p1 == p2:
-                df[-1].append(-1)
+                df[-1].append(0.0)
             elif player_pair_game_cnts[p1][p2] >= thresh:
                 df[-1].append(player_pair_team_cnts[p1][p2] / player_pair_game_cnts[p1][p2])
             else:
@@ -644,7 +724,115 @@ def player_pair_opp_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None)
     
     return df.reset_index()
 
-def player_pair_win_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None):
+def player_pair_cnts(ex_ch=False, df=None, bad=False):
+    """
+    Compute number of times two players have been on the same team.
+    ex_ch : bool
+        exclude cheesy wins
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    bad : bool
+        only count bad team games
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+    if ex_ch:
+        df = df[~(df[CHEESY_WIN] == 'Yes')]
+    
+    player_cnts = defaultdict(int)
+    player_pair_game_cnts = defaultdict(lambda: defaultdict(int))
+    player_pair_team_cnts = defaultdict(lambda: defaultdict(int))
+    for idx, row in df.iterrows():
+        for role1 in ROLES:
+            player1 = row[role1]
+            player_cnts[player1] += 1
+            for role2 in ROLES:
+                if role1 == role2:
+                    continue
+                player2 = row[role2]
+                if player1 in [UNK, NA] or player2 in [UNK, NA]:
+                    continue
+
+                player_pair_game_cnts[player1][player2] += 1
+                
+                if bad and (role1 not in BADS or role2 not in BADS):
+                    continue
+                if role1 in BADS and role2 not in BADS:
+                    continue
+                if role1 not in BADS and role2 in BADS:
+                    continue
+
+                player_pair_team_cnts[player1][player2] += 1
+    
+    df = []
+    players = list(player_pair_game_cnts.keys())
+    for p1 in players:
+        df.append([])
+        for p2 in players:
+            if p1 == p2:
+                df[-1].append(player_cnts[p1] if not bad else -1)
+            else:
+                df[-1].append(player_pair_team_cnts[p1][p2])
+    
+    df = pd.DataFrame(df, columns=players, index=players)
+    df.index = df.index.rename("Player")
+    
+    return df.reset_index()
+
+def player_pair_opp_cnts(ex_ch=False, df=None):
+    """
+    Compute number of times two players have been on opposite teams.
+    ex_ch : bool
+        exclude cheesy wins
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+    if ex_ch:
+        df = df[~(df[CHEESY_WIN] == 'Yes')]
+    
+    player_cnts = defaultdict(int)
+    player_pair_game_cnts = defaultdict(lambda: defaultdict(int))
+    player_pair_team_cnts = defaultdict(lambda: defaultdict(int))
+    for idx, row in df.iterrows():
+        for role1 in ROLES:
+            player1 = row[role1]
+            player_cnts[player1] += 1
+            for role2 in ROLES:
+                if role1 == role2:
+                    continue
+                player2 = row[role2]
+                if player1 in [UNK, NA] or player2 in [UNK, NA]:
+                    continue
+
+                player_pair_game_cnts[player1][player2] += 1
+
+                if role1 in BADS and role2 in BADS:
+                    continue
+                if role1 not in BADS and role2 not in BADS:
+                    continue
+
+                player_pair_team_cnts[player1][player2] += 1
+    
+    df = []
+    players = list(player_pair_game_cnts.keys())
+    for p1 in players:
+        df.append([])
+        for p2 in players:
+            if p1 == p2:
+                df[-1].append(0)
+            else:
+                df[-1].append(player_pair_team_cnts[p1][p2])
+    
+    df = pd.DataFrame(df, columns=players, index=players)
+    df.index = df.index.rename("Player")
+    
+    return df.reset_index()
+
+def player_pair_win_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None, bad=False):
     """
     Compute percentage of times two players have won after being on the same team.
     thresh : int
@@ -655,6 +843,8 @@ def player_pair_win_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None)
         exclude cheesy wins
     df : pd.DataFrame
         game data log (if None, fetch from API)
+    bad : bool
+        only count bad team games
     return : pd.DataFrame
     """
     if df is None:
@@ -672,10 +862,12 @@ def player_pair_win_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None)
             for role2 in ROLES:
                 if role1 == role2:
                     continue
+                if bad and (role1 not in BADS or role2 not in BADS):
+                    continue
                 player2 = row[role2]
                 if player1 in [UNK, NA] or player2 in [UNK, NA]:
                     continue
-
+                
                 if role1 in BADS and role2 in BADS:
                     player_pair_team_cnts[player1][player2] += 1
                     if row[WINNER] == BAD:
@@ -685,9 +877,14 @@ def player_pair_win_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=None)
                     if row[WINNER] == GOOD:
                         player_pair_win_cnts[player1][player2] += 1
                 
+    insuff_data = []
+    for player1 in player_pair_team_cnts:
+        if all(player_pair_team_cnts[player1][player2] < thresh for player2 in player_pair_team_cnts[player1]):
+            insuff_data.append(player1)
+    
     df = []
     players = list(player_pair_team_cnts.keys())
-    players = list(filter(lambda p: player_cnts[p] >= thresh, players))
+    players = list(filter(lambda p: player_cnts[p] >= thresh and p not in insuff_data, players))
     for p1 in players:
         df.append([])
         for p2 in players:
@@ -745,9 +942,14 @@ def player_pair_vs_win_pcts(thresh=SAMPLE_THRESH, rounding=2, ex_ch=False, df=No
                     if row[WINNER] == GOOD:
                         player_pair_win_cnts[player1][player2] += 1
                 
+    insuff_data = []
+    for player1 in player_pair_opp_cnts:
+        if all(player_pair_opp_cnts[player1][player2] < thresh for player2 in player_pair_opp_cnts[player1]):
+            insuff_data.append(player1)
+    
     df = []
     players = list(player_pair_opp_cnts.keys())
-    players = list(filter(lambda p: player_cnts[p] >= thresh, players))
+    players = list(filter(lambda p: player_cnts[p] >= thresh and p not in insuff_data, players))
     for p1 in players:
         df.append([])
         for p2 in players:
@@ -899,28 +1101,87 @@ def flip_win_pcts(missions, ns=2, df=None):
         columns=["# Fails", "Count", "%", "Good Win %"]
     )
 
-def merlin_assassination_n_players(df=None):
+def good_win_rates_n_percivals(ex_ch=False, df=None):
     """
-    Find percentage of time Merlin is assassinated w.r.t. game size.
+    Compute win rate of good team w.r.t. number of percival claims
+    ex_ch : bool
+        exclude cheesy wins
     df : pd.DataFrame
         game data log (if None, fetch from API)
     return : pd.DataFrame
     """
     if df is None:
         df = fetch_game_log(parse_cols=True)
-        
+    if ex_ch:
+        df = df[~(df[CHEESY_WIN] == 'Yes')]
+    df = df[[GAME_INDEX, GOOD_WIN, NUM_PERCIVAL]].groupby(NUM_PERCIVAL) \
+            .agg(
+                    {
+                        GAME_INDEX: 'count',
+                        GOOD_WIN: 'mean'
+                    }
+                ) \
+            .rename(
+                {
+                    GAME_INDEX: "Sample Size",
+                    GOOD_WIN: "Good Win %"
+                },
+                axis=1
+            )
+    
+    return df.reset_index()
+
+def fake_percival_claim_pct(rounding=5, df=None):
+    """
+    Compute % of times each role fake claims Percival.
+    rounding : int
+        num decimal places to round to
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+    
     num_games = defaultdict(int)
-    num_assassinations = defaultdict(int)
+    num_fake_claims = defaultdict(int)
+    
     for idx, row in df.iterrows():
-        num_players = row[NUM_PLAYERS]
-        num_games[num_players] += 1
-        if row[MERLIN] == row[ASSASSINATION]:
-            num_assassinations[num_players] += 1
-            
-    return pd.DataFrame(
-        [(num_players, num_assassinations[num_players] / num_games[num_players], num_games[num_players]) for num_players in num_games],
-        columns=["# Players", "Merlin Assassination %", "Sample Size"]
-    ).sort_values("# Players")
+        for role in ROLES:
+            if row[role] == NA:
+                continue
+            if role in LOYALS:
+                num_games[LOYAL_SERVANT] += 1
+            else:
+                num_games[role] += 1
+                
+        if row[FAKE_PERCIVAL] == 'None':
+            continue
+        fakes = row[FAKE_PERCIVAL].split(', ')
+                
+        for fake in fakes:
+            for role in ROLES:
+                if row[role] == fake:
+                    if role in LOYALS:
+                        num_fake_claims[LOYAL_SERVANT] += 1
+                    else:
+                        num_fake_claims[role] += 1
+                        
+    df = pd.DataFrame(
+        [
+            (
+                role,
+                num_fake_claims[role] / num_games[role],
+                num_games[role],
+                num_fake_claims[role]
+            ) for role in num_games if role != PERCIVAL
+        ],
+        columns=["Role", "Fake Percival Claim %", "Sample Size", "# Fake Claims"]
+    ).set_index("Role")
+    
+    df["Fake Percival Claim %"] = df["Fake Percival Claim %"].apply(lambda x: np.round(x, rounding))
+    
+    return df.reset_index()
     
 def wrong_assassination_player(thresh=SAMPLE_THRESH, df=None):
     """
@@ -938,6 +1199,8 @@ def wrong_assassination_player(thresh=SAMPLE_THRESH, df=None):
     num_assassinations = defaultdict(int)
     for idx, row in df.iterrows():
         if row[ASSASSINATION] in [UNK, NA]:
+            continue
+        if row[WINNER] != GOOD:
             continue
         for role in ROLES:
             if role in BADS or role == MERLIN:
@@ -995,3 +1258,75 @@ def correct_assassination_player(thresh=SAMPLE_THRESH, df=None):
         ],
         columns=["Player", "Assassination %", "# Assassinations", "Sample Size"]
     ).sort_values("Assassination %")
+
+def merlin_assassination_breakdown(df=None):
+    """
+    Compute % of games which reach assassination phase that end in correct assassination, by game size.
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+    
+    num_games = defaultdict(int) # num games reaching assassination phase
+    num_assassinations = defaultdict(int)
+    for idx, row in df.iterrows():
+        if row[ASSASSINATION] in [UNK, NA]: # filtering NA accounts for cases where bad won on missions
+            continue
+        num_games[row[NUM_PLAYERS]] += 1
+        if row[WINNER] == BAD:
+            num_assassinations[row[NUM_PLAYERS]] += 1
+    
+    return pd.DataFrame(
+        [
+            (
+                num_players,
+                num_assassinations[num_players] / num_games[num_players],
+                num_assassinations[num_players],
+                num_games[num_players]
+            ) for num_players in num_games
+        ],
+        columns=["# Players", "Assassination %", "# Assassinations", "Sample Size"]
+    ).sort_values("# Players")
+
+def merlin_assassination_breakdown_percival(df=None):
+    """
+    Compute % of games which reach assassination phase that end in correct assassination, by game size and # percival claims.
+    df : pd.DataFrame
+        game data log (if None, fetch from API)
+    return : pd.DataFrame
+    """
+    if df is None:
+        df = fetch_game_log(parse_cols=True)
+    
+    num_games = defaultdict(lambda: defaultdict(int)) # num games reaching assassination phase
+    num_assassinations = defaultdict(lambda: defaultdict(int))
+    num_percivals = set()
+    for idx, row in df.iterrows():
+        if row[ASSASSINATION] in [UNK, NA]: # filtering NA accounts for cases where bad won on missions
+            continue
+        num_games[row[NUM_PLAYERS]][row[NUM_PERCIVAL]] += 1
+        if row[WINNER] == BAD:
+            num_assassinations[row[NUM_PLAYERS]][row[NUM_PERCIVAL]] += 1
+        num_percivals.add(row[NUM_PERCIVAL])
+    
+    df = []
+    for num_players in num_games:
+        for num_percival in num_percivals:
+            if not num_games[num_players][num_percival]:
+                continue
+            df.append(
+                (
+                    num_players,
+                    num_percival,
+                    num_assassinations[num_players][num_percival] / num_games[num_players][num_percival],
+                    num_assassinations[num_players][num_percival],
+                    num_games[num_players][num_percival]   
+                )
+            )
+    
+    return pd.DataFrame(df, columns=["# Players", "# Percival Claims", "Assassination %", "# Assassinations", "Sample Size"]) \
+               .set_index(["# Players", "# Percival Claims"]) \
+               .sort_index() \
+               .reset_index()

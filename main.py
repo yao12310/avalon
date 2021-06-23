@@ -4,6 +4,7 @@ Entry point script.
 
 import argparse
 
+from .utils.constants import NON_COMPETITIVE
 from .utils.constants import GAME_LOG_COLS
 from .utils.constants import NA
 from .utils.sheets import write_game_log
@@ -17,7 +18,9 @@ def main_db_write(args):
         for col in GAME_LOG_COLS:
             data.append(input("{}: ".format(col)) or NA)
         
-    player_write = args.player_write
+    non_competitive = data[GAME_LOG_COLS.index(NON_COMPETITIVE)]
+    
+    player_write = args.player_write and non_competitive != 'Yes'
     write_game_log([data], player_write)
 
 def main_update_stat(args):
