@@ -10,12 +10,25 @@ import tabulate
 
 # hack, but needed for testing in jupyter
 if __name__ == 'avalon.utils.read_update':
-    from .constants import *
-    from .stats import *
+    from ..utils.constants import *
+    from ..stats.aggregates import *
+    from ..stats.assassinations import *
+    from ..stats.leaderboards import *
+    from ..stats.percival import *
+    from ..stats.player_pairs import *
+    from ..stats.players import *
+    from ..stats.strats import *
+    from ..utils.sheets import *
 else:
     sys.path.append('..')
     from utils.constants import *
-    from utils.stats import *
+    from stats.aggregates import *
+    from stats.assassinations import *
+    from stats.leaderboards import *
+    from stats.percival import *
+    from stats.player_pairs import *
+    from stats.players import *
+    from stats.strats import *
     from utils.sheets import fetch_game_log
 
 def write_stats():
@@ -146,7 +159,7 @@ def write_stats():
         f.write("\n*Cheesy wins included.*")
         f.write("\n")
         f.write("\n")
-        for role in ROLES:
+        for role in ROLES + [LOYAL_SERVANT]:
             if role in [OBERON, MINION] + LOYALS:
                 continue
             df = top_win_rates_role(role, df=game_log_competitive)
