@@ -5,3 +5,4 @@ scratch/
 keys/client.json
 data/*.tsv
 utils/.ipynb_checkpoints/
+stats/.ipynb_checkpoints/
