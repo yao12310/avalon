@@ -30,7 +30,7 @@ TEMPLATE = "Template"
 
 # game metadata
 
-SIZES = [5, 6, 7, 8, 9, 10]
+SIZES = ['5', '5O', '6', '6M', '7', '7O', '8', '8O', '9', '9O', '10']
 MAX_LOYAL = 4
 MAX_ROUNDS = 5
 SAMPLE_THRESH = 5
@@ -103,7 +103,7 @@ GAME_LOG_COLS = (
     [name.format(round_idx) for round_idx in range(2, MAX_ROUNDS) for name in [LOTL_TESTER, LOTL_TESTED, LOTL_CLAIM, LOTL_GROUP]] # lotl
 )
 
-GAME_LOG_NUM_COLS = [GAME_INDEX, NUM_PLAYERS, SUCCESSES, FAILS, GOOD_WIN, NUM_PERCIVAL, LENGTH]
+GAME_LOG_NUM_COLS = [GAME_INDEX, SUCCESSES, FAILS, GOOD_WIN, NUM_PERCIVAL, LENGTH]
 
 # player data
 # some inconsistencies in col naming due to legacy reasons
