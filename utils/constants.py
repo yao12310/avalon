@@ -30,17 +30,37 @@ TEMPLATE = "Template"
 
 # game metadata
 
-SIZES = ['5', '5O', '6', '6M', '7', '7O', '8', '8O', '9', '9O', '10']
+SIZES = ['5', '5O', '6', '6O', '6M', '7', '7O', '8', '8O', '9', '9O', '10']
 MAX_LOYAL = 4
 MAX_ROUNDS = 5
 SAMPLE_THRESH = 5
 GOOD_WIN_RATES_BALANCE = {
-    5: .4,
-    6: 1 / 3,
-    7: 3 / 7,
-    8: .375,
-    9: 1 / 3,
-    10: .4
+    '5': .4,
+    '5O': .4,
+    '6': 1 / 3,
+    '6O': 1 / 3,
+    '6M': 1 / 3,
+    '7': 3 / 7,
+    '7O': 3 / 7,
+    '8': .375,
+    '8O': .375,
+    '9': 1 / 3,
+    '9O': 1 / 3,
+    '10': .4
+}
+NUM_PLAYERS_MAP = {
+    '5': (5, 3),
+    '5O': (5, 3),
+    '6': (6, 4),
+    '6O': (6, 4),
+    '6M': (6, 4),
+    '7': (7, 4),
+    '7O': (7, 4),
+    '8': (8, 5),
+    '8O': (8, 5),
+    '9': (9, 6),
+    '9O': (9, 6),
+    '10': (10, 6)
 }
 
 # data
@@ -89,7 +109,6 @@ LADY_OF_THE_LAKE = "Lady of the Lake"
 LOTL_TESTER = "R{} Tester"
 LOTL_TESTED = "R{} Tested"
 LOTL_CLAIM = "R{} Claim"
-LOTL_GROUP = "R{} Group Dec"
 
 GAME_LOG_COLS = (
     [DATE, GAME_INDEX, NUM_PLAYERS, NON_COMPETITIVE] + # identifiers
@@ -100,7 +119,7 @@ GAME_LOG_COLS = (
     [WEAK_KGT_APPLY, WEAK_KGT_SUCCESS, STRONG_KGT_APPLY, STRONG_KGT_SUCCESS] + # kgt info
     [LENGTH] + # misc
     [LADY_OF_THE_LAKE] + 
-    [name.format(round_idx) for round_idx in range(2, MAX_ROUNDS) for name in [LOTL_TESTER, LOTL_TESTED, LOTL_CLAIM, LOTL_GROUP]] # lotl
+    [name.format(round_idx) for round_idx in range(2, MAX_ROUNDS) for name in [LOTL_TESTER, LOTL_TESTED, LOTL_CLAIM]] # lotl
 )
 
 GAME_LOG_NUM_COLS = [GAME_INDEX, SUCCESSES, FAILS, GOOD_WIN, NUM_PERCIVAL, LENGTH]

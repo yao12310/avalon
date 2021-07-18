@@ -2,6 +2,8 @@
 Aggregate game-level statistics.
 """
 
+import sys
+
 # hack, but needed for testing in jupyter
 if __name__ == 'avalon.stats.aggregates':
     from ..utils.constants import *

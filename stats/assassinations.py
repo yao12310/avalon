@@ -2,6 +2,8 @@
 Assassination statistics.
 """
 
+import sys
+
 # hack, but needed for testing in jupyter
 if __name__ == 'avalon.stats.assassinations':
     from ..utils.constants import *
