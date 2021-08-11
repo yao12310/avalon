@@ -110,6 +110,8 @@ LOTL_TESTER = "R{} Tester"
 LOTL_TESTED = "R{} Tested"
 LOTL_CLAIM = "R{} Claim"
 
+NOTES = "Notes"
+
 GAME_LOG_COLS = (
     [DATE, GAME_INDEX, NUM_PLAYERS, NON_COMPETITIVE] + # identifiers
     ROLES + # role info
@@ -119,7 +121,8 @@ GAME_LOG_COLS = (
     [WEAK_KGT_APPLY, WEAK_KGT_SUCCESS, STRONG_KGT_APPLY, STRONG_KGT_SUCCESS] + # kgt info
     [LENGTH] + # misc
     [LADY_OF_THE_LAKE] + 
-    [name.format(round_idx) for round_idx in range(2, MAX_ROUNDS) for name in [LOTL_TESTER, LOTL_TESTED, LOTL_CLAIM]] # lotl
+    [name.format(round_idx) for round_idx in range(2, MAX_ROUNDS) for name in [LOTL_TESTER, LOTL_TESTED, LOTL_CLAIM]] + # lotl
+    [NOTES]
 )
 
 GAME_LOG_NUM_COLS = [GAME_INDEX, SUCCESSES, FAILS, GOOD_WIN, NUM_PERCIVAL, LENGTH]
