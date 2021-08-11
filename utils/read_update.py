@@ -386,8 +386,11 @@ def write_stats():
         
         f.write("\n")
         f.write('### <a id="correctly-assassinated"></a>% of time players are correctly assassinated as Merlin (minimum 3 games with 3 mission successes as Merlin)\n')
-        f.write("\n")  
-        df = correct_assassination_player(thresh=3, df=game_log)
+        f.write("\n")
+        f.write("\n*Competitive games only statistic.*")
+        f.write("\n")
+        f.write("\n")
+        df = correct_assassination_player(thresh=3, df=game_log_competitive)
         f.write(tabulate.tabulate(df.values, df.columns, tablefmt="github") + '\n')
         
         f.write("\n")
