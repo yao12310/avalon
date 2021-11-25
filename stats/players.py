@@ -61,7 +61,7 @@ def games_played_rank(thresh=SAMPLE_THRESH, df=None):
             
     player_game_cnt = {player: cnt for player, cnt in player_game_cnt.items() if cnt >= thresh}
     
-    return pd.DataFrame(player_game_cnt.items(), columns=["Player", "Games Played"]).sort_values("Games Played", ascending=False)
+    return pd.DataFrame(list(player_game_cnt.items()), columns=["Player", "Games Played"]).sort_values("Games Played", ascending=False)
 
 def good_pct_rank(thresh=SAMPLE_THRESH, df=None):
     """

@@ -275,7 +275,7 @@ def win_pct_ev(ex_ch=False, use_theoretical_rates=False, thresh=SAMPLE_THRESH, d
         
         player_win_pct_evs[player] = ev
             
-    return pd.DataFrame(player_win_pct_evs.items(), columns=["Player", "Expected Win %"]).sort_values("Expected Win %", ascending=False)
+    return pd.DataFrame(list(player_win_pct_evs.items()), columns=["Player", "Expected Win %"]).sort_values("Expected Win %", ascending=False)
 
 def win_pct_over_ev_rank(ex_ch=False, n=5, use_theoretical_rates=False, thresh=SAMPLE_THRESH, df=None):
     """
