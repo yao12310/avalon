@@ -14,6 +14,7 @@ if __name__ == 'avalon.utils.read_update':
     from ..stats.aggregates import *
     from ..stats.assassinations import *
     from ..stats.leaderboards import *
+    from ..stats.missions import *
     from ..stats.percival import *
     from ..stats.player_pairs import *
     from ..stats.players import *
@@ -25,6 +26,7 @@ else:
     from stats.aggregates import *
     from stats.assassinations import *
     from stats.leaderboards import *
+    from stats.missions import *
     from stats.percival import *
     from stats.player_pairs import *
     from stats.players import *
@@ -66,12 +68,13 @@ def write_stats():
         f.write("26. [% of time players are correctly assassinated as Merlin](#correctly-assassinated)\n")
         f.write("27. [% of time Merlin is assassinated by game size](#assassination-game-size)\n")        
         f.write("28. [% of time Merlin is assassinated by game size and # Percival claims](#assassination-game-size-percival)\n")
+        f.write("29. [Mission success/fail sequence counts](#pass-fail-sequences)\n")
         
         f.write("## Stats\n")
         
         f.write("\n")
         f.write("Note: The friends and memories made in this game far outweigh any statistic you will find on this page. ")
-        f.write("In any case, most of these stats are super high variance—especially individual stats, which depend heavily on team composition.")
+        f.write("In any case, most of these stats are super high variance: especially individual stats, which depend heavily on team composition.")
         f.write("\n")
         
         f.write("\n")
@@ -405,3 +408,12 @@ def write_stats():
         df = merlin_assassination_breakdown_percival(df=game_log)
         f.write(tabulate.tabulate(df.values, df.columns, tablefmt="pipe").replace(':', '') + '\n')
         
+        f.write("\n")
+        f.write('### <a id="pass-fail-sequences"></a>Mission success/fail sequence counts\n')
+        f.write("\n")  
+        for seq_len in range(1, MAX_ROUNDS + 1):
+            df = mission_patterns(seq_len, game_log)
+            f.write("\n")
+            f.write("*Lengths:*\n".format(seq_len))
+            f.write("\n")
+            f.write(tabulate.tabulate(df.values, df.columns, tablefmt="pipe").replace(':', '') + '\n')

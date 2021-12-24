@@ -4,8 +4,10 @@ Mission pass/fail statistics.
 
 import sys
 
+from itertools import product
+
 # hack, but needed for testing in jupyter
-if __name__ == 'avalon.stats.assassinations':
+if __name__ == 'avalon.stats.missions':
     from ..utils.constants import *
     from ..utils.sheets import *
 else:
@@ -53,7 +55,10 @@ def mission_patterns(n, df=None):
             else:
                 curr_seq.append(FAIL)
         if len(curr_seq) == n:
-            counts[tuple(curr_seq)] += 1
+            try:
+                counts[tuple(curr_seq)] += 1
+            except KeyError: # bad sequence due to incorrect game data
+                continue
     
     return pd.DataFrame(
         [
