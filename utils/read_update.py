@@ -414,6 +414,6 @@ def write_stats():
         for seq_len in range(1, MAX_ROUNDS + 1):
             df = mission_patterns(seq_len, game_log)
             f.write("\n")
-            f.write("*Lengths:*\n".format(seq_len))
+            f.write("*Lengths: {}*\n".format(seq_len))
             f.write("\n")
             f.write(tabulate.tabulate(df.values, df.columns, tablefmt="pipe").replace(':', '') + '\n')

@@ -44,6 +44,7 @@ def mission_patterns(n, df=None):
     
     poss = list(filter(valid_seq, product([SUCCESS, FAIL], repeat=n)))
     counts = {seq: 0 for seq in poss}
+    good_wins = {seq: 0 for seq in poss}
     for idx, row in df.iterrows():
         curr_seq = []
         for mission in range(1, n + 1):
@@ -57,6 +58,8 @@ def mission_patterns(n, df=None):
         if len(curr_seq) == n:
             try:
                 counts[tuple(curr_seq)] += 1
+                if row[WINNER] == GOOD:
+                    good_wins[tuple(curr_seq)] += 1
             except KeyError: # bad sequence due to incorrect game data
                 continue
     
@@ -65,8 +68,9 @@ def mission_patterns(n, df=None):
             (
                 ', '.join(seq),
                 counts[seq],
-                counts[seq] / sum(counts.values())
+                counts[seq] / sum(counts.values()),
+                good_wins[seq] / counts[seq] if counts[seq] else NA
             ) for seq in counts
         ],
-        columns=["Sequence", "Count", "Frequency"]
+        columns=["Sequence", "Count", "Frequency", "Good Win %"]
     )

@@ -1152,65 +1152,65 @@ Cheesy wins excluded:
 ### <a id="pass-fail-sequences"></a>Mission success/fail sequence counts
 
 
-*Lengths:*
+*Lengths: 1*
 
-| Sequence   |   Count |   Frequency |
-|-----------|--------|------------|
-| Success    |     201 |     0.87013 |
-| Fail       |      30 |     0.12987 |
+| Sequence   |   Count |   Frequency |   Good Win % |
+|-----------|--------|------------|-------------|
+| Success    |     201 |     0.87013 |     0.437811 |
+| Fail       |      30 |     0.12987 |     0.4      |
 
-*Lengths:*
+*Lengths: 2*
 
-| Sequence         |   Count |   Frequency |
-|-----------------|--------|------------|
-| Success, Success |      90 |   0.38961   |
-| Success, Fail    |     111 |   0.480519  |
-| Fail, Success    |      16 |   0.0692641 |
-| Fail, Fail       |      14 |   0.0606061 |
+| Sequence         |   Count |   Frequency |   Good Win % |
+|-----------------|--------|------------|-------------|
+| Success, Success |      90 |   0.38961   |     0.622222 |
+| Success, Fail    |     111 |   0.480519  |     0.288288 |
+| Fail, Success    |      16 |   0.0692641 |     0.625    |
+| Fail, Fail       |      14 |   0.0606061 |     0.142857 |
 
-*Lengths:*
+*Lengths: 3*
 
-| Sequence                  |   Count |   Frequency |
-|--------------------------|--------|------------|
-| Success, Success, Success |      54 |   0.233766  |
-| Success, Success, Fail    |      36 |   0.155844  |
-| Success, Fail, Success    |      56 |   0.242424  |
-| Success, Fail, Fail       |      55 |   0.238095  |
-| Fail, Success, Success    |      15 |   0.0649351 |
-| Fail, Success, Fail       |       1 |   0.004329  |
-| Fail, Fail, Success       |       7 |   0.030303  |
-| Fail, Fail, Fail          |       7 |   0.030303  |
+| Sequence                  |   Count |   Frequency |   Good Win % |
+|--------------------------|--------|------------|-------------|
+| Success, Success, Success |      54 |   0.233766  |     0.685185 |
+| Success, Success, Fail    |      36 |   0.155844  |     0.527778 |
+| Success, Fail, Success    |      56 |   0.242424  |     0.428571 |
+| Success, Fail, Fail       |      55 |   0.238095  |     0.145455 |
+| Fail, Success, Success    |      15 |   0.0649351 |     0.666667 |
+| Fail, Success, Fail       |       1 |   0.004329  |     0        |
+| Fail, Fail, Success       |       7 |   0.030303  |     0.285714 |
+| Fail, Fail, Fail          |       7 |   0.030303  |     0        |
 
-*Lengths:*
+*Lengths: 4*
 
-| Sequence                        |   Count |   Frequency |
-|--------------------------------|--------|------------|
-| Success, Success, Fail, Success |      13 |  0.0769231  |
-| Success, Success, Fail, Fail    |      23 |  0.136095   |
-| Success, Fail, Success, Success |      42 |  0.248521   |
-| Success, Fail, Success, Fail    |      14 |  0.0828402  |
-| Success, Fail, Fail, Success    |      40 |  0.236686   |
-| Success, Fail, Fail, Fail       |      14 |  0.0828402  |
-| Fail, Success, Success, Success |       8 |  0.0473373  |
-| Fail, Success, Success, Fail    |       7 |  0.0414201  |
-| Fail, Success, Fail, Success    |       1 |  0.00591716 |
-| Fail, Success, Fail, Fail       |       0 |  0          |
-| Fail, Fail, Success, Success    |       7 |  0.0414201  |
-| Fail, Fail, Success, Fail       |       0 |  0          |
+| Sequence                        |   Count |   Frequency | Good Win %          |
+|--------------------------------|--------|------------|--------------------|
+| Success, Success, Fail, Success |      13 |  0.0769231  | 0.7692307692307693  |
+| Success, Success, Fail, Fail    |      23 |  0.136095   | 0.391304347826087   |
+| Success, Fail, Success, Success |      42 |  0.248521   | 0.47619047619047616 |
+| Success, Fail, Success, Fail    |      14 |  0.0828402  | 0.2857142857142857  |
+| Success, Fail, Fail, Success    |      40 |  0.236686   | 0.2                 |
+| Success, Fail, Fail, Fail       |      14 |  0.0828402  | 0.0                 |
+| Fail, Success, Success, Success |       8 |  0.0473373  | 0.875               |
+| Fail, Success, Success, Fail    |       7 |  0.0414201  | 0.42857142857142855 |
+| Fail, Success, Fail, Success    |       1 |  0.00591716 | 0.0                 |
+| Fail, Success, Fail, Fail       |       0 |  0          | N/A                 |
+| Fail, Fail, Success, Success    |       7 |  0.0414201  | 0.2857142857142857  |
+| Fail, Fail, Success, Fail       |       0 |  0          | N/A                 |
 
-*Lengths:*
+*Lengths: 5*
 
-| Sequence                              |   Count |   Frequency |
-|--------------------------------------|--------|------------|
-| Success, Success, Fail, Fail, Success |      13 |   0.173333  |
-| Success, Success, Fail, Fail, Fail    |       5 |   0.0666667 |
-| Success, Fail, Success, Fail, Success |       6 |   0.08      |
-| Success, Fail, Success, Fail, Fail    |       2 |   0.0266667 |
-| Success, Fail, Fail, Success, Success |      20 |   0.266667  |
-| Success, Fail, Fail, Success, Fail    |      19 |   0.253333  |
-| Fail, Success, Success, Fail, Success |       1 |   0.0133333 |
-| Fail, Success, Success, Fail, Fail    |       1 |   0.0133333 |
-| Fail, Success, Fail, Success, Success |       0 |   0         |
-| Fail, Success, Fail, Success, Fail    |       1 |   0.0133333 |
-| Fail, Fail, Success, Success, Success |       5 |   0.0666667 |
-| Fail, Fail, Success, Success, Fail    |       2 |   0.0266667 |
+| Sequence                              |   Count |   Frequency | Good Win %          |
+|--------------------------------------|--------|------------|--------------------|
+| Success, Success, Fail, Fail, Success |      13 |   0.173333  | 0.46153846153846156 |
+| Success, Success, Fail, Fail, Fail    |       5 |   0.0666667 | 0.0                 |
+| Success, Fail, Success, Fail, Success |       6 |   0.08      | 0.5                 |
+| Success, Fail, Success, Fail, Fail    |       2 |   0.0266667 | 0.0                 |
+| Success, Fail, Fail, Success, Success |      20 |   0.266667  | 0.4                 |
+| Success, Fail, Fail, Success, Fail    |      19 |   0.253333  | 0.0                 |
+| Fail, Success, Success, Fail, Success |       1 |   0.0133333 | 0.0                 |
+| Fail, Success, Success, Fail, Fail    |       1 |   0.0133333 | 0.0                 |
+| Fail, Success, Fail, Success, Success |       0 |   0         | N/A                 |
+| Fail, Success, Fail, Success, Fail    |       1 |   0.0133333 | 0.0                 |
+| Fail, Fail, Success, Success, Success |       5 |   0.0666667 | 0.4                 |
+| Fail, Fail, Success, Success, Fail    |       2 |   0.0266667 | 0.0                 |
