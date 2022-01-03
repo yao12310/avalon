@@ -14,10 +14,10 @@ mv path/to/key/client.json avalon/keys/
 
 Updating DB:
 ```
-python -m avalon.main db_write --row {equals sign-separated list of values, optional} --player_write {True/False, optional, default=True}
+python -m avalon.main db_write --player_write {True/False, optional, default=True}
 ```
 
-If `--row` is excluded, then the script will prompt you to enter each value one-by-one. (Recommended method.)
+The script will prompt you to enter each column value for the data row one-by-one.
 
 Updating README Stats:
 ```

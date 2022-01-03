@@ -105,17 +105,7 @@ CHEESY_WIN = "Cheesy Win"
 NUM_PERCIVAL = "# Percival Claims"
 FAKE_PERCIVAL = "Fake Percival Claims"
 
-WEAK_KGT_APPLY = "Weak KGT Applied"
-WEAK_KGT_SUCCESS = "Weak KGT Success"
-STRONG_KGT_APPLY = "Strong KGT Applied"
-STRONG_KGT_SUCCESS = "Strong KGT Success"
-
 LENGTH = "Length (minutes)"
-
-LADY_OF_THE_LAKE = "Lady of the Lake"
-LOTL_TESTER = "R{} Tester"
-LOTL_TESTED = "R{} Tested"
-LOTL_CLAIM = "R{} Claim"
 
 NOTES = "Notes"
 
@@ -125,10 +115,7 @@ GAME_LOG_COLS = (
     [name.format(round_idx) for round_idx in range(1, MAX_ROUNDS + 1) for name in [TEAM_ROUND, FAILS_ROUND]] +
     [SUCCESSES, FAILS, ASSASSINATION, WINNER, GOOD_WIN, CHEESY_WIN] + # outcomes
     [NUM_PERCIVAL, FAKE_PERCIVAL] + # percival data
-    [WEAK_KGT_APPLY, WEAK_KGT_SUCCESS, STRONG_KGT_APPLY, STRONG_KGT_SUCCESS] + # kgt info
     [LENGTH] + # misc
-    [LADY_OF_THE_LAKE] + 
-    [name.format(round_idx) for round_idx in range(2, MAX_ROUNDS) for name in [LOTL_TESTER, LOTL_TESTED, LOTL_CLAIM]] + # lotl
     [NOTES]
 )
 

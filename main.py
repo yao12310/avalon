@@ -11,12 +11,9 @@ from .utils.sheets import write_game_log
 from .utils.read_update import write_stats
 
 def main_db_write(args):
-    if args.row is not None:
-        data = [args.row.split('=')]
-    else:
-        data = []
-        for col in GAME_LOG_COLS:
-            data.append(input("{}: ".format(col)) or NA)
+    data = []
+    for col in GAME_LOG_COLS:
+        data.append(input("{}: ".format(col)) or NA)
         
     non_competitive = data[GAME_LOG_COLS.index(NON_COMPETITIVE)]
     
@@ -38,7 +35,6 @@ def main():
     sub_update_stat = subparsers.add_parser("update_stat", description="update README.md with stats")
     sub_stats = subparsers.add_parser("stats", description="run statistical analyses (no update to README)")
     
-    sub_db_write.add_argument('--row', '-r', action='store', type=str, required=False, default=None, help="row of game log data")
     sub_db_write.add_argument('--player_write', '-p', action='store', type=bool, required=False, default=True, help="update player data worksheets")
     sub_db_write.set_defaults(func=main_db_write)
     
