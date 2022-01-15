@@ -1170,24 +1170,24 @@ Cheesy wins excluded:
 
 | Sequence                        |   Count |   Frequency | Good Win %          |
 |--------------------------------|--------|------------|--------------------|
-| Success, Success, Fail, Success |      13 |  0.0698925  | 0.7692307692307693  |
-| Success, Success, Fail, Fail    |      26 |  0.139785   | 0.38461538461538464 |
-| Success, Fail, Success, Success |      45 |  0.241935   | 0.4888888888888889  |
-| Success, Fail, Success, Fail    |      17 |  0.0913978  | 0.4117647058823529  |
-| Success, Fail, Fail, Success    |      44 |  0.236559   | 0.22727272727272727 |
-| Success, Fail, Fail, Fail       |      15 |  0.0806452  | 0.0                 |
-| Fail, Success, Success, Success |       8 |  0.0430108  | 0.875               |
-| Fail, Success, Success, Fail    |       7 |  0.0376344  | 0.42857142857142855 |
+| Success, Success, Fail, Success |      19 |  0.102151   | 0.6842105263157895  |
+| Success, Success, Fail, Fail    |      20 |  0.107527   | 0.35                |
+| Success, Fail, Success, Success |      53 |  0.284946   | 0.4716981132075472  |
+| Success, Fail, Success, Fail    |       9 |  0.0483871  | 0.4444444444444444  |
+| Success, Fail, Fail, Success    |      46 |  0.247312   | 0.21739130434782608 |
+| Success, Fail, Fail, Fail       |      13 |  0.0698925  | 0.0                 |
+| Fail, Success, Success, Success |      13 |  0.0698925  | 0.7692307692307693  |
+| Fail, Success, Success, Fail    |       2 |  0.0107527  | 0.0                 |
 | Fail, Success, Fail, Success    |       1 |  0.00537634 | 0.0                 |
 | Fail, Success, Fail, Fail       |       0 |  0          | N/A                 |
-| Fail, Fail, Success, Success    |       8 |  0.0430108  | 0.25                |
-| Fail, Fail, Success, Fail       |       2 |  0.0107527  | 0.0                 |
+| Fail, Fail, Success, Success    |       9 |  0.0483871  | 0.2222222222222222  |
+| Fail, Fail, Success, Fail       |       1 |  0.00537634 | 0.0                 |
 
 *Lengths: 5*
 
 | Sequence                              |   Count |   Frequency | Good Win %          |
 |--------------------------------------|--------|------------|--------------------|
-| Success, Success, Fail, Fail, Success |      14 |   0.166667  | 0.5                 |
+| Success, Success, Fail, Fail, Success |      13 |   0.154762  | 0.5384615384615384  |
 | Success, Success, Fail, Fail, Fail    |       7 |   0.0833333 | 0.0                 |
 | Success, Fail, Success, Fail, Success |       7 |   0.0833333 | 0.5714285714285714  |
 | Success, Fail, Success, Fail, Fail    |       2 |   0.0238095 | 0.0                 |
@@ -1197,5 +1197,5 @@ Cheesy wins excluded:
 | Fail, Success, Success, Fail, Fail    |       1 |   0.0119048 | 0.0                 |
 | Fail, Success, Fail, Success, Success |       0 |   0         | N/A                 |
 | Fail, Success, Fail, Success, Fail    |       1 |   0.0119048 | 0.0                 |
-| Fail, Fail, Success, Success, Success |       6 |   0.0714286 | 0.3333333333333333  |
+| Fail, Fail, Success, Success, Success |       7 |   0.0833333 | 0.2857142857142857  |
 | Fail, Fail, Success, Success, Fail    |       2 |   0.0238095 | 0.0                 |

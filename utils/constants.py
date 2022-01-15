@@ -68,6 +68,23 @@ NUM_PLAYERS_MAP = {
     '9L': (9, 6),
     '10': (10, 6)
 }
+R4_DOUBLE_FAIL_REQ = {
+    '5': False,
+    '5O': False,
+    '5P': False,
+    '5X': False,
+    '6': False,
+    '6O': False,
+    '6M': False,
+    '7': True,
+    '7O': True,
+    '8': True,
+    '8O': True,
+    '9': True,
+    '9O': True,
+    '9L': True,
+    '10': True
+}
 
 # data
 

@@ -49,9 +49,10 @@ def mission_patterns(n, df=None):
         curr_seq = []
         for mission in range(1, n + 1):
             fails = row[FAILS_ROUND.format(mission)]
+            double_fail_req = len(fails.split(', ')) == 1 and R4_DOUBLE_FAIL_REQ[row[NUM_PLAYERS]]
             if fails == NA or fails == UTD:
                 break
-            elif fails == NONE:
+            elif fails == NONE or (mission == 4 and double_fail_req):
                 curr_seq.append(SUCCESS)
             else:
                 curr_seq.append(FAIL)
