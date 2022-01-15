@@ -30,13 +30,14 @@ TEMPLATE = "Template"
 
 # game metadata
 
-SIZES = ['5', '5O', '5X', '6', '6O', '6M', '7', '7O', '8', '8O', '9', '9O', '9L', '10']
+SIZES = ['5', '5O', '5P', '5X', '6', '6O', '6M', '7', '7O', '8', '8O', '9', '9O', '9L', '10']
 MAX_LOYAL = 4
 MAX_ROUNDS = 5
 SAMPLE_THRESH = 5
 GOOD_WIN_RATES_BALANCE = {
     '5': .4,
     '5O': .4,
+    '5P': .4,
     '5X': .4,
     '6': 1 / 3,
     '6O': 1 / 3,
@@ -53,6 +54,7 @@ GOOD_WIN_RATES_BALANCE = {
 NUM_PLAYERS_MAP = {
     '5': (5, 3),
     '5O': (5, 3),
+    '5P': (5, 3),
     '5X': (5, 3),
     '6': (6, 4),
     '6O': (6, 4),
